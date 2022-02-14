@@ -4,6 +4,19 @@ import styles from '../styles/Home.module.css'
 import { Twitter } from "@styled-icons/boxicons-logos/Twitter";
 import { Github } from "@styled-icons/boxicons-logos/Github"
 
+import { StyledIconBase } from '@styled-icons/styled-icon'
+
+const IconStyleWrapper = styled.div`
+text-align: center;
+  
+${StyledIconBase} {
+    height: 45px;
+    width: 45px;
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+`
+
 const Header = styled.div`
     background-color: #F4A7A7;
     height: 40px;
@@ -89,6 +102,8 @@ const LanuchAppButton = styled.div`
     width: 160px;
     height: 49px;
 
+    padding-bottom: 55px;
+
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #C4C4C4;
     border: 1px solid #000000;
     box-sizing: border-box;
@@ -112,6 +127,8 @@ const LearnMoreButton = styled.div`
     width: 160px;
     height: 49px;
 
+    padding-bottom: 55px;
+
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #C4C4C4;
     border: 1px solid #000000;
     box-sizing: border-box;
@@ -126,14 +143,14 @@ const LearnMoreButton = styled.div`
         background-color: #E8E8E8;
     }
 
-    margin-left: 70%;
+    margin-left: 6%;
 
     font-size: 18px;
 
 `
 
 const ButtonBox = styled.div`
-
+  
 `
 
 const NavBar = styled.div`
@@ -157,7 +174,7 @@ const RoadMapContainer = styled.div`
 const TeamContainer = styled.div`
      background-color: #CDA3A6C9;
 
-     height: 600px;
+     height: 500px;
      width: 100%;
 
      margin-top: -25px;
@@ -176,14 +193,19 @@ const FooterContainer = styled.div`
     background-color: black;
 
     width: 100%;
-    height: 90px;
 
-    marign-top: -40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 
-    padding-top: 30px;
     text-align: center;
-
     color: white;
+
+    p {
+        :hover {
+            color: #0000EE;
+            cursor: pointer;
+        }
+    }
 
 `
 
@@ -248,13 +270,15 @@ function LandingPage() {
 
                     <h3> Kyle Longrich</h3>
 
-                    <a href="https://twitter.com/longrichk">
-                        <Twitter size={35} color="#1DA1F2" />
-                    </a>
+                    <IconStyleWrapper>
+                        <a href="https://twitter.com/longrichk">
+                            <Twitter size={35} color="#1DA1F2" />
+                        </a>
 
-                    <a href="https://github.com/klongrich">
-                        <Github size={35} color="black" />
-                    </a>
+                        <a href="https://github.com/klongrich">
+                            <Github size={35} color="black" />
+                        </a>
+                    </IconStyleWrapper>
                 </TeamContainer>
 
                 <FooterContainer>

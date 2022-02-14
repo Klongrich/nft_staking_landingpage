@@ -1,7 +1,20 @@
 import styled from "styled-components";
 
 import { Twitter } from "@styled-icons/boxicons-logos/Twitter";
-import { Github } from "@styled-icons/boxicons-logos/Github"
+import { Github } from "@styled-icons/boxicons-logos/Github";
+
+import { StyledIconBase } from '@styled-icons/styled-icon'
+
+const IconStyleWrapper = styled.div`
+text-align: center;
+  
+${StyledIconBase} {
+    height: 50px;
+    width: 50px;
+    margin-left: 38px;
+    margin-right: 38px;
+  }
+`
 
 const Header = styled.div`
     background-color: #F4A7A7;
@@ -189,16 +202,21 @@ const TeamContainer = styled.div`
 
 const FooterContainer = styled.div`
     background-color: black;
-
     width: 100%;
-    height: 90px;
-
-    marign-top: -40px;
 
     padding-top: 20px;
+    padding-bottom: 20px;
+
     text-align: center;
 
     color: white;
+
+    p {
+        :hover {
+            color: #0000EE;
+            cursor: pointer;
+        }
+    }
 `
 
 function LandingPage() {
@@ -266,13 +284,14 @@ function LandingPage() {
 
                     <h4> Kyle Longrich</h4>
 
-                    <a href="https://twitter.com/longrichk">
-                        <Twitter size={35} color="#1DA1F2" />
-                    </a>
-
-                    <a href="https://github.com/klongrich">
-                        <Github size={35} color="black" />
-                    </a>
+                    <IconStyleWrapper>
+                        <a href="https://twitter.com/longrichk">
+                            <Twitter size={50} color="#1DA1F2" />
+                        </a>
+                        <a href="https://github.com/klongrich">
+                            <Github size={50} color="black" />
+                        </a>
+                    </IconStyleWrapper>
                 </TeamContainer>
 
                 <FooterContainer>
