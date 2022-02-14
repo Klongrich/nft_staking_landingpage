@@ -1,12 +1,8 @@
 import styled from "styled-components";
 import styles from '../styles/Home.module.css'
-import Image from 'next/image'
-import TeamPhoto from "../public/ProfilePic.png";
 
 import { Twitter } from "@styled-icons/boxicons-logos/Twitter";
 import { Github } from "@styled-icons/boxicons-logos/Github"
-
-import RoadMap from "../public/RoadMap2.0.png";
 
 const Header = styled.div`
     background-color: #F4A7A7;
