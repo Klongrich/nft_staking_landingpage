@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Image from 'next/image'
 
-import Roadmap from "../static/RoadmapMobile3.png";
-import TeamPhoto from "../static/ProfilePic.png";
+import Roadmap from "../public/RoadmapMobile3.png";
+import TeamPhoto from "../public/ProfilePic.png";
 
 import { Twitter } from "@styled-icons/boxicons-logos/Twitter";
 import { Github } from "@styled-icons/boxicons-logos/Github"
