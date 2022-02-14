@@ -1,8 +1,4 @@
 import styled from "styled-components";
-import Image from 'next/image'
-
-import Roadmap from "../public/RoadmapMobile3.png";
-import TeamPhoto from "../public/ProfilePic.png";
 
 import { Twitter } from "@styled-icons/boxicons-logos/Twitter";
 import { Github } from "@styled-icons/boxicons-logos/Github"
@@ -257,7 +253,7 @@ function LandingPage() {
                 </About>
 
                 <RoadMapContainer>
-                    <Image src={Roadmap} alt='' />
+                    <img src="RoadmapMobile3.png" alt='' width="100%" />
                 </RoadMapContainer>
 
                 <TeamContainer>
@@ -266,7 +262,7 @@ function LandingPage() {
                     <h3> Founder - CEO </h3>
 
                     {/* Image of Sappy */}
-                    <Image src={TeamPhoto} alt="" height={200} width={230} />
+                    <img src="/ProfilePic.png" alt="" height={200} width={230} />
 
                     <h4> Kyle Longrich</h4>
 

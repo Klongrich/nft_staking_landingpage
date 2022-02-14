@@ -240,7 +240,7 @@ function LandingPage() {
                 </About>
 
                 <RoadMapContainer>
-                    <Image src={RoadMap} alt='' />
+                    <img src="/Roadmap2.0.png" alt='' width="100%" />
                 </RoadMapContainer>
 
                 <TeamContainer>
@@ -248,7 +248,7 @@ function LandingPage() {
 
                     <h3> Founder - CEO </h3>
 
-                    <Image src={TeamPhoto} alt="" height={150} width={173} />
+                    <img src="/ProfilePic.png" alt="" height={150} width={173} />
 
                     <h3> Kyle Longrich</h3>
 
