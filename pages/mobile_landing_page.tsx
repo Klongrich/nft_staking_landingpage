@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Image from 'next/image'
 
-import Roadmap from "./RoadmapMobile3.png";
-import TeamPhoto from "./ProfilePic.png";
+import Roadmap from "../static/RoadmapMobile3.png";
+import TeamPhoto from "../static/ProfilePic.png";
 
 import { Twitter } from "@styled-icons/boxicons-logos/Twitter";
 import { Github } from "@styled-icons/boxicons-logos/Github"
@@ -171,7 +171,7 @@ const TeamContainer = styled.div`
      height: 600px;
      width: 100%;
 
-     margin-top: 100px;
+     margin-top: -30px;
 
      text-align: center;
 
