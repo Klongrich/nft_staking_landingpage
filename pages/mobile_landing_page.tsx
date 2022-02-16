@@ -219,6 +219,34 @@ const FooterContainer = styled.div`
     }
 `
 
+const EarnUpToBox = styled.div`
+
+    margin-top: -50px;
+    margin-bottom: 0px;
+
+    padding-left: 20px;
+    padding-right: 20px;
+
+    padding-top: 30px;
+    padding-bottom: 30px;
+
+    margin-left: 10px;
+    margin-right: 20px;
+
+    font-size: 30px;
+
+    text-decoration: underline;
+
+
+    p {
+        :hover {
+            color: #3A3A3A;
+            cursor: pointer;
+        }
+    }
+
+`
+
 function LandingPage() {
 
     return (
@@ -240,6 +268,10 @@ function LandingPage() {
 
 
                     <br />
+
+                    <EarnUpToBox>
+                        Earn up to 8.2% APY
+                    </EarnUpToBox>
                     <AboutTextBox>
                         {/* <div className={styles.topRightConer}>
                             <div className={styles.rotate} />
