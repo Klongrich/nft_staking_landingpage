@@ -249,6 +249,19 @@ const EarnUpToBox = styled.div`
 
 function LandingPage() {
 
+    const scrollToTeam = () => {
+        window.scrollTo({ top: 1750, behavior: 'smooth' });
+    };
+
+    const scrollToRoadMap = () => {
+        window.scrollTo({ top: 935, behavior: 'smooth' });
+    };
+
+    const scrollToAbout = () => {
+        window.scrollTo({ top: 75, behavior: 'smooth' });
+    };
+
+
     return (
         <>
             <div>
@@ -258,9 +271,9 @@ function LandingPage() {
 
                     <NavBar>
                         <ul>
-                            <li>About</li>
-                            <li>Roadmap</li>
-                            <li>Team</li>
+                            <li onClick={scrollToAbout}>About</li>
+                            <li onClick={scrollToRoadMap}>Roadmap</li>
+                            <li onClick={scrollToTeam}>Team</li>
                         </ul>
                     </NavBar>
 
