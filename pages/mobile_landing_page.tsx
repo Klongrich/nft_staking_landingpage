@@ -247,6 +247,12 @@ const EarnUpToBox = styled.div`
 
 `
 
+const HowItWorks = styled.div`
+    background-color: #CDA3A6;
+    text-align: center;
+    padding-bottom: 20px;
+`
+
 function LandingPage() {
 
     const scrollToTeam = () => {
@@ -314,6 +320,10 @@ function LandingPage() {
                         </LearnMoreButton>
                     </ButtonBox>
                 </About>
+
+                <HowItWorks>
+                    <img src="HowItWorks3.png" alt="" width="90%" />
+                </HowItWorks>
 
                 <RoadMapContainer>
                     <img src="RoadmapMobile6.png" alt='' width="100%" />
