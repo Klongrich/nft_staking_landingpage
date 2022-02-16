@@ -164,9 +164,11 @@ const NavBar = styled.div`
 
 const RoadMapContainer = styled.div`
 
-    background-color: #C4C4C4;
+    background-color: #E5E5E5;
     width: 100%;
     height: 100%;
+
+    padding-top: 29px;
 
     text-align: center;
 
@@ -259,7 +261,7 @@ function LandingPage() {
                 <Header />
 
                 <About>
-                    <h2> nft.staking </h2>
+                    <h2> nft.stake </h2>
 
                     <NavBar>
                         <ul>
@@ -281,8 +283,8 @@ function LandingPage() {
                         <h3>About ........ </h3>
 
                         <p>
-                            nft.staking is a platform for staking your ERC-721 Tokens
-                            for passive Income.
+                            nft.stake is a platform for staking your ERC-721 Tokens
+                            to earn passive Income.
                         </p>
 
                         {/* 
@@ -304,7 +306,7 @@ function LandingPage() {
                 </About>
 
                 <RoadMapContainer>
-                    <img src="/Roadmap2.0.png" alt='' width="100%" />
+                    <img src="/Roadmap3.0.png" alt='' width="100%" />
                 </RoadMapContainer>
 
                 <TeamContainer>

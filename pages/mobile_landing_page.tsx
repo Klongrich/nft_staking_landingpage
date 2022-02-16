@@ -277,7 +277,7 @@ function LandingPage() {
                         </ul>
                     </NavBar>
 
-                    <h2> nft.staking </h2>
+                    <h2> nft.stake </h2>
 
 
                     <br />
@@ -293,8 +293,8 @@ function LandingPage() {
                         <h3>About ........ </h3>
 
                         <p>
-                            nft.staking is a platform for staking your ERC-721 Tokens
-                            for passive Income.
+                            nft.stake is a platform for staking your ERC-721 Tokens
+                            to earn passive Income.
                         </p>
 
                         {/* 
@@ -316,7 +316,7 @@ function LandingPage() {
                 </About>
 
                 <RoadMapContainer>
-                    <img src="RoadmapMobile3.png" alt='' width="100%" />
+                    <img src="RoadmapMobile6.png" alt='' width="100%" />
                 </RoadMapContainer>
 
                 <TeamContainer>
