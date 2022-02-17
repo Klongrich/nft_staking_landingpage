@@ -172,6 +172,9 @@ const RoadMapContainer = styled.div`
 
     text-align: center;
 
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+
 `
 
 const TeamContainer = styled.div`
@@ -240,6 +243,14 @@ const EarnUpToBox = styled.div`
     
 `
 
+const HowItWorks = styled.div`
+
+    padding: 50px;
+    margin-bottom: -10px;
+
+    background-color: #CDA3A6;
+`
+
 
 function LandingPage() {
 
@@ -304,6 +315,10 @@ function LandingPage() {
                         </LearnMoreButton>
                     </ButtonBox>
                 </About>
+
+                <HowItWorks>
+                    <img src="desktopHowItWorks.png" alt="" width="100%" />
+                </HowItWorks>
 
                 <RoadMapContainer>
                     <img src="/Roadmap3.0.png" alt='' width="100%" />
