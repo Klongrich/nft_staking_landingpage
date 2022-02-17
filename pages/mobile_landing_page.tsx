@@ -256,15 +256,19 @@ const HowItWorks = styled.div`
 function LandingPage() {
 
     const scrollToTeam = () => {
-        window.scrollTo({ top: 1750, behavior: 'smooth' });
+        window.scrollTo({ top: 2800, behavior: 'smooth' });
     };
 
     const scrollToRoadMap = () => {
-        window.scrollTo({ top: 935, behavior: 'smooth' });
+        window.scrollTo({ top: 1900, behavior: 'smooth' });
     };
 
+    const scrollToLearnMore = () => {
+        window.scrollTo({ top: 920, behavior: 'smooth' })
+    }
+
     const scrollToAbout = () => {
-        window.scrollTo({ top: 75, behavior: 'smooth' });
+        window.scrollTo({ top: 82, behavior: 'smooth' });
     };
 
 
@@ -315,7 +319,7 @@ function LandingPage() {
                             <p>Lanuch App</p>
                         </LanuchAppButton>
 
-                        <LearnMoreButton>
+                        <LearnMoreButton onClick={() => scrollToLearnMore()}>
                             <p>Learn More</p>
                         </LearnMoreButton>
                     </ButtonBox>
