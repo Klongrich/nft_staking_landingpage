@@ -6,6 +6,9 @@ import { Github } from "@styled-icons/boxicons-logos/Github"
 
 import { StyledIconBase } from '@styled-icons/styled-icon'
 
+import { useRouter } from "next/router";
+
+
 const IconStyleWrapper = styled.div`
 text-align: center;
   
@@ -120,7 +123,6 @@ const LanuchAppButton = styled.div`
     }
 
     font-size: 18px;
-
 `
 
 const LearnMoreButton = styled.div`
@@ -212,7 +214,6 @@ const FooterContainer = styled.div`
             cursor: pointer;
         }
     }
-
 `
 
 const EarnUpToBox = styled.div`
@@ -239,8 +240,6 @@ const EarnUpToBox = styled.div`
             cursor: pointer;
         }
     }
-
-    
 `
 
 const HowItWorks = styled.div`
@@ -269,6 +268,10 @@ function LandingPage() {
     const scrollToAbout = () => {
         window.scrollTo({ top: 75, behavior: 'smooth' });
     };
+
+    const router = useRouter();
+
+    console.log(router, 'routes');
 
     return (
         <>
@@ -310,7 +313,7 @@ function LandingPage() {
                     </AboutTextBox>
 
                     <ButtonBox>
-                        <LanuchAppButton>
+                        <LanuchAppButton onClick={() => router.push("/app")}>
                             <p>Lanuch App</p>
                         </LanuchAppButton>
 

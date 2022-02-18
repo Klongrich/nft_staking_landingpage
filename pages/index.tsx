@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextPage } from 'next';
 import { useEffect, useState } from "react";
 import Head from 'next/head'
 import Image from 'next/image'
@@ -32,7 +32,6 @@ const Home: NextPage = () => {
       {width < 999 &&
         <div>
           <MobileLandingPage />
-
           <div className={styles.helloWorld}>
             <h2> Hello World </h2>
           </div>
