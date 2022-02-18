@@ -295,6 +295,7 @@ function LandingPage() {
                         Earn up to 8.2% APY
                     </div>
                     <div className="AboutTextBox">
+
                         {/* <div className={styles.topRightConer}>
                             <div className={styles.rotate} />
                         </div> */}

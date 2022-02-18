@@ -33,7 +33,9 @@ const Home: NextPage = () => {
         <div>
           <MobileLandingPage />
           <div className={styles.helloWorld}>
-            <h2> Hello World </h2>
+            <div className="helloWorld">
+              <h2> Hello World </h2>
+            </div>
           </div>
         </div>
       }

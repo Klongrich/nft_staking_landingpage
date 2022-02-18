@@ -1,13 +1,12 @@
 .Header {
     background-color: #F4A7A7;
-    height: 40px;
-    width: 100%;
-    margin-bottom: -40px;
+    height: 80px;
+    width: 110%;
 }
 
 .About {
     background-color: #CDA3A6;
-    width: 90%;
+    width: 100%;
 
     padding: 20px;
     padding-bottom: 50px;
@@ -113,7 +112,7 @@
     
     text-align: center;
 
-    margin-left: 10px;
+    margin-left: 40px;
 
     display: inline-block;
 
@@ -132,7 +131,7 @@
 
     margin-bottom: -50px;
 
-    padding-top: 25px;
+    padding-top: 0px;
     margin-top: 35px;
     margin-bottom: -40px;
 }
@@ -141,7 +140,7 @@
     z-index: -1;
 
     background-color: #C4C4C4;
-    width: 100%;
+    width: 110%;
     height: 100%;
 
     text-align: center;
@@ -151,7 +150,7 @@
     background-color: #CDA3A6C9;
 
     height: 600px;
-    width: 100%;
+    width: 110%;
 
     margin-top: -30px;
 
@@ -175,7 +174,7 @@
 
 .FooterContainer {
     background-color: black;
-    width: 100%;
+    width: 110%;
 
     padding-top: 20px;
     padding-bottom: 20px;
@@ -217,5 +216,5 @@
     background-color: #CDA3A6;
     text-align: center;
     padding-bottom: 20px;
-    width: 100%;
+    width: 110%;
 }
