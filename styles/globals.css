@@ -3,3 +3,225 @@ body {
   margin: 0;
 }
 
+
+.Header {
+  background-color: #F4A7A7;
+  height: 80px;
+  width: 110%;
+}
+
+.About {
+  background-color: #CDA3A6;
+  width: 100%;
+
+  padding: 20px;
+  padding-bottom: 50px;
+
+  margin-top: -40px;
+}
+
+.About li {
+  float: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-right: 1px solid black;
+  padding-bottom: 0px;
+  padding-top: 3px;
+  text-decoration-line: underline; 
+}
+
+.About li:hover {
+  cursor: pointer;
+  color: #3A3A3A;
+}
+
+.About ul {
+  list-style-type: none;
+  text-align: right;
+  margin-top: -10px;
+  margin-right: 40px;
+}
+
+.About h2 {
+  width: 210px;
+  height: 42px;
+  font-family: Roboto;
+  font-size: 48px;
+  line-height: 45px;
+  margin-left: 30px;
+  padding-top: 40px;
+
+}
+
+.About h3 {
+  font-size: 22px;
+}
+
+.AboutTextBox {
+  background-color: #CD8285;
+
+  margin-top: 40px;
+  margin-bottom: 70px;
+  margin-left: 20px;
+  margin-right: 20px;
+
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 1px;
+  padding-bottom: 40px;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  line-height: 2;
+}
+
+.AboutTextBox p {
+  font-size: 30px;
+}
+
+.AboutTextBox h3 {
+  font-size: 32px;
+}
+
+.LanuchAppButton {
+  width: 150px;
+  height: 55px;
+
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #C4C4C4;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  display: inline-block;
+  margin-left: 20px;
+  
+  text-align: center;
+
+  font-size: 18px;
+}
+
+.LanuchAppButton:hover {
+  cursor: pointer;
+  background-color: #E8E8E8;
+}
+
+.LearnMoreButton {
+  width: 150px;
+  height: 55px;
+
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #C4C4C4;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  display: inline-block;
+  
+  text-align: center;
+
+  margin-left: 40px;
+
+  display: inline-block;
+
+  font-size: 18px;
+}
+
+.LearnMoreButton:hover {
+  cursor: pointer;
+  background-color: #E8E8E8;
+}
+
+.NavBar {
+  margin-bottom: 30px;
+  width: 100%;
+  height: 34px;
+
+  margin-bottom: -50px;
+
+  padding-top: 0px;
+  margin-top: 35px;
+  margin-bottom: -40px;
+}
+
+.RoadMapContainer {
+  z-index: -1;
+
+  background-color: #C4C4C4;
+  width: 110%;
+  height: 100%;
+
+  text-align: center;
+}
+
+.TeamContainer {
+  background-color: #CDA3A6C9;
+
+  height: 600px;
+  width: 110%;
+
+  margin-top: -30px;
+
+  text-align: center;
+}
+
+.TeamContainer h2 {
+  padding-top: 30px;
+  font-size: 30px;
+  padding-bottom: 50px;
+  text-decoration: underline;
+}
+
+.TeamContainer h3 {
+  font-size: 24px;
+}
+
+.TeamContainer h4 {
+  font-size: 20px;
+}
+
+.FooterContainer {
+  background-color: black;
+  width: 110%;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  text-align: center;
+
+  color: white;
+}
+
+.FooterContainer p:hover {
+  color: #0000EE;
+  cursor: pointer;
+}
+
+.EarnUpToBox {
+  margin-top: -50px;
+  margin-bottom: 0px;
+
+  padding-left: 20px;
+  padding-right: 20px;
+
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  margin-left: 10px;
+  margin-right: 20px;
+
+  font-size: 30px;
+
+  text-decoration: underline;
+}
+
+.EarnUpToBox p:hover {
+  color: #3A3A3A;
+  cursor: pointer;
+}
+
+.HowItWorks {
+  background-color: #CDA3A6;
+  text-align: center;
+  padding-bottom: 20px;
+  width: 110%;
+}
+
