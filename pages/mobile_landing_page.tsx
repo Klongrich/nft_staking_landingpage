@@ -18,242 +18,239 @@ ${StyledIconBase} {
   }
 `
 
-const Header = styled.div`
-    background-color: #F4A7A7;
-    height: 40px;
-    width: 100%;
-    margin-top: 0px;
-`
+// const Header = styled.div`
+//     background-color: #F4A7A7;
+//     height: 40px;
+//     width: 100%;
+//     margin-top: 0px;
+// `
 
-const About = styled.div`
-    background-color: #CDA3A6;
-    width: 100%:
+// const About = styled.div`
+//     background-color: #CDA3A6;
+//     width: 100%;
 
-    padding: 20px;
-    padding-bottom: 50px;
+//     padding: 20px;
+//     padding-bottom: 50px;
 
-    margin-top: -40px;
+//     margin-top: -40px;
 
-    h2 {
-        width: 210px;
-        height: 42px;
-        font-family: Roboto;
-        font-size: 48px;
-        line-height: 45px;
-        margin-left: 30px;
-        padding-top: 40px;
-    }
+//     h2 {
+//         width: 210px;
+//         height: 42px;
+//         font-family: Roboto;
+//         font-size: 48px;
+//         line-height: 45px;
+//         margin-left: 30px;
+//         padding-top: 40px;
+//     }
 
-    h3 {
-        font-size: 22px;
-    }
+//     h3 {
+//         font-size: 22px;
+//     }
 
-    ul {
-        text-decoratoin: none;
-        list-style-type: none;
-        text-align: right;
-        margin-top: -10px;
-        margin-right: 40px;
-    }
+//     ul {
+//         text-decoratoin: none;
+//         list-style-type: none;
+//         text-align: right;
+//         margin-top: -10px;
+//         margin-right: 40px;
+//     }
 
-    li {
-        float: right;
-        padding-left: 10px;
-        padding-right: 10px;
-        border-right: 1px solid black;
-        padding-bottom: 0px;
-        padding-top: 3px;
-        text-decoration-line: underline; 
-        
-        :hover {
-            cursor: pointer;
-            color: #3A3A3A;
-        }
-    }
+//     li {
+//         float: right;
+//         padding-left: 10px;
+//         padding-right: 10px;
+//         border-right: 1px solid black;
+//         padding-bottom: 0px;
+//         padding-top: 3px;
+//         text-decoration-line: underline; 
 
-`
+//         :hover {
+//             cursor: pointer;
+//             color: #3A3A3A;
+//         }
+//     }
 
-const AboutTextBox = styled.div`
-    background-color: #CD8285;
+// `
 
-    margin-top: 40px;
-    margin-bottom: 70px;
-    margin-left: 20px;
-    margin-right: 20px;
+// const AboutTextBox = styled.div`
+//     background-color: #CD8285;
 
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 1px;
-    padding-bottom: 40px;
+//     margin-top: 40px;
+//     margin-bottom: 70px;
+//     margin-left: 20px;
+//     margin-right: 20px;
 
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+//     padding-left: 20px;
+//     padding-right: 20px;
+//     padding-top: 1px;
+//     padding-bottom: 40px;
 
-    p {
-        font-size: 30px;
-    }
+//     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
-    h3 {
-        font-size: 32px;
-    }
+//     p {
+//         font-size: 30px;
+//     }
 
-    line-height: 2;
-`
+//     h3 {
+//         font-size: 32px;
+//     }
 
-const LanuchAppButton = styled.div`
-    width: 150px;
-    height: 55px;
+//     line-height: 2;
+// `
 
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #C4C4C4;
-    border: 1px solid #000000;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+// const LanuchAppButton = styled.div`
+//     width: 150px;
+//     height: 55px;
 
-    display: inline-block;
-    margin-left: 20px;
-    
-    text-align: center;
+//     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #C4C4C4;
+//     border: 1px solid #000000;
+//     box-sizing: border-box;
+//     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
-    :hover {
-        cursor: pointer;
-        background-color: #E8E8E8;
-    }
+//     display: inline-block;
+//     margin-left: 20px;
 
-    font-size: 18px;
+//     text-align: center;
 
-`
+//     :hover {
+//         cursor: pointer;
+//         background-color: #E8E8E8;
+//     }
 
-const LearnMoreButton = styled.div`
-    width: 150px;
-    height: 55px;
+//     font-size: 18px;
 
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #C4C4C4;
-    border: 1px solid #000000;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+// `
 
-    display: inline-block;
-    
-    text-align: center;
+// const LearnMoreButton = styled.div`
+//     width: 150px;
+//     height: 55px;
 
-    :hover {
-        cursor: pointer;
-        background-color: #E8E8E8;
-    }
+//     background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #C4C4C4;
+//     border: 1px solid #000000;
+//     box-sizing: border-box;
+//     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
-    margin-left: 40px;
+//     display: inline-block;
 
-    display: inline-block;
+//     text-align: center;
 
-    font-size: 18px;
+//     :hover {
+//         cursor: pointer;
+//         background-color: #E8E8E8;
+//     }
 
-`
+//     margin-left: 40px;
 
-const ButtonBox = styled.div`
+//     display: inline-block;
 
-`
+//     font-size: 18px;
 
-const NavBar = styled.div`
-    margin-bottom: 30px;
-    width: 100%;
-    height: 34px;
-
-    margin-bottom: -50px;
-
-    padding-top: 25px;
-    margin-top: 35px;
-    margin-bottom: -40px;
-`
-
-const RoadMapContainer = styled.div`
-
-    z-index: -1;
-
-    background-color: #C4C4C4;
-    width: 100%;
-    height: 100%;
-
-    text-align: center;
-
-`
-
-const TeamContainer = styled.div`
-     background-color: #CDA3A6C9;
-
-     height: 600px;
-     width: 100%;
-
-     margin-top: -30px;
-
-     text-align: center;
-
-     h2 {
-         padding-top: 30px;
-         font-size: 30px;
-         padding-bottom: 50px;
-         text-decoration: underline;
-     }
-
-     h3 {
-         font-size: 24px;
-     }
-
-     h4 {
-        font-size: 20px;
-     }
-`
-
-const FooterContainer = styled.div`
-    background-color: black;
-    width: 100%;
-
-    padding-top: 20px;
-    padding-bottom: 20px;
-
-    text-align: center;
-
-    color: white;
-
-    p {
-        :hover {
-            color: #0000EE;
-            cursor: pointer;
-        }
-    }
-`
-
-const EarnUpToBox = styled.div`
-
-    margin-top: -50px;
-    margin-bottom: 0px;
-
-    padding-left: 20px;
-    padding-right: 20px;
-
-    padding-top: 30px;
-    padding-bottom: 30px;
-
-    margin-left: 10px;
-    margin-right: 20px;
-
-    font-size: 30px;
-
-    text-decoration: underline;
+// `
 
 
-    p {
-        :hover {
-            color: #3A3A3A;
-            cursor: pointer;
-        }
-    }
+// const NavBar = styled.div`
+//     margin-bottom: 30px;
+//     width: 100%;
+//     height: 34px;
 
-`
+//     margin-bottom: -50px;
 
-const HowItWorks = styled.div`
-    background-color: #CDA3A6;
-    text-align: center;
-    padding-bottom: 20px;
-`
+//     padding-top: 25px;
+//     margin-top: 35px;
+//     margin-bottom: -40px;
+// `
+
+// const RoadMapContainer = styled.div`
+
+//     z-index: -1;
+
+//     background-color: #C4C4C4;
+//     width: 100%;
+//     height: 100%;
+
+//     text-align: center;
+
+// `
+
+// const TeamContainer = styled.div`
+//      background-color: #CDA3A6C9;
+
+//      height: 600px;
+//      width: 100%;
+
+//      margin-top: -30px;
+
+//      text-align: center;
+
+//      h2 {
+//          padding-top: 30px;
+//          font-size: 30px;
+//          padding-bottom: 50px;
+//          text-decoration: underline;
+//      }
+
+//      h3 {
+//          font-size: 24px;
+//      }
+
+//      h4 {
+//         font-size: 20px;
+//      }
+// `
+
+// const FooterContainer = styled.div`
+//     background-color: black;
+//     width: 100%;
+
+//     padding-top: 20px;
+//     padding-bottom: 20px;
+
+//     text-align: center;
+
+//     color: white;
+
+//     p {
+//         :hover {
+//             color: #0000EE;
+//             cursor: pointer;
+//         }
+//     }
+// `
+
+// const EarnUpToBox = styled.div`
+
+//     margin-top: -50px;
+//     margin-bottom: 0px;
+
+//     padding-left: 20px;
+//     padding-right: 20px;
+
+//     padding-top: 30px;
+//     padding-bottom: 30px;
+
+//     margin-left: 10px;
+//     margin-right: 20px;
+
+//     font-size: 30px;
+
+//     text-decoration: underline;
+
+
+//     p {
+//         :hover {
+//             color: #3A3A3A;
+//             cursor: pointer;
+//         }
+//     }
+
+// `
+
+// const HowItWorks = styled.div`
+//     background-color: #CDA3A6;
+//     text-align: center;
+//     padding-bottom: 20px;
+// `
 
 function LandingPage() {
 
@@ -278,27 +275,26 @@ function LandingPage() {
     return (
         <>
             <div>
-                <Header />
+                <div className="Header" />
 
-                <About>
-
-                    <NavBar>
+                <div className="About">
+                    <div className="NavBar">
                         <ul>
                             <li onClick={scrollToAbout}>About</li>
                             <li onClick={scrollToRoadMap}>Roadmap</li>
                             <li onClick={scrollToTeam}>Team</li>
                         </ul>
-                    </NavBar>
+                    </div>
 
                     <h2> nft.stake </h2>
 
 
                     <br />
 
-                    <EarnUpToBox>
+                    <div className="EarnUpToBox">
                         Earn up to 8.2% APY
-                    </EarnUpToBox>
-                    <AboutTextBox>
+                    </div>
+                    <div className="AboutTextBox">
                         {/* <div className={styles.topRightConer}>
                             <div className={styles.rotate} />
                         </div> */}
@@ -315,33 +311,32 @@ function LandingPage() {
                             <div className={styles.rotate} />
                         </div> */}
 
-                    </AboutTextBox>
+                    </div>
 
-                    <ButtonBox>
-                        <LanuchAppButton onClick={() => router.push('/app')}>
+                    <div>
+                        <div className="LanuchAppButton" onClick={() => router.push('/app')}>
                             <p>Lanuch App</p>
-                        </LanuchAppButton>
+                        </div>
 
-                        <LearnMoreButton onClick={() => scrollToLearnMore()}>
+                        <div className="LearnMoreButton" onClick={() => scrollToLearnMore()}>
                             <p>Learn More</p>
-                        </LearnMoreButton>
-                    </ButtonBox>
-                </About>
+                        </div>
+                    </div>
+                </div>
 
-                <HowItWorks>
+                <div className="HowItWorks">
                     <img src="HowItWorks3.png" alt="" width="90%" />
-                </HowItWorks>
+                </div>
 
-                <RoadMapContainer>
+                <div className="RoadMapContainer">
                     <img src="RoadmapMobile6.png" alt='' width="100%" />
-                </RoadMapContainer>
+                </div>
 
-                <TeamContainer>
+                <div className="TeamContainer">
                     <h2> Team </h2>
 
                     <h3> Founder - CEO </h3>
 
-                    {/* Image of Sappy */}
                     <img src="/ProfilePic.png" alt="" height={200} width={230} />
 
                     <h4> Kyle Longrich</h4>
@@ -354,13 +349,13 @@ function LandingPage() {
                             <Github size={50} color="black" />
                         </a>
                     </IconStyleWrapper>
-                </TeamContainer>
+                </div>
 
-                <FooterContainer>
+                <div className="FooterContainer">
                     <p> Contact: Longrichk@gmail.com </p>
-                </FooterContainer>
+                </div>
 
-            </div>
+            </div >
         </>
     )
 }
