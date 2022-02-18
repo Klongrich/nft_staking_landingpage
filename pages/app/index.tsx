@@ -8,6 +8,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import { User } from "@styled-icons/boxicons-regular/User"
 
 import Dashboard from "./dashboard";
+import MobileDashboard from "./mobileDashboard";
 
 //Move infuraID to .env file
 const providerOptions = {
@@ -75,16 +76,72 @@ const AccountButton = styled.div`
 
 `
 
-export function Dapp(): any {
+const HeaderMobile = styled.div`
 
+`
+
+const ConnectWalletMobile = styled.div`
+    background-color: #F4A7A7;
+
+    padding: 10px;
+    
+    width: 210px;
+    height: 20px;
+
+    text-align: center;
+
+    font-size: 22px;
+
+    border: 1px solid black;
+
+    margin-left: 30px;
+    margin-top: 70px;
+    margin-bottom: 40px;
+
+    float: left;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    :hover {
+        background-color: #FDC8C7;
+        cursor: pointer;
+    }
+    
+`
+
+const AccountButtonMobile = styled.div`
+    background-color: #F4A7A7;
+
+    height: 30px;
+    width: 44px;
+    
+    float: right;
+
+    border: 1px solid black;
+
+    margin-top: 70px;
+    margin-right: 30px;
+    padding-left: 8px;
+    padding-top: 4px;
+    padding-bottom: 5px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    :hover {
+        background-color: #FDC8C7;
+        cursor: pointer;
+    }
+
+`
+
+
+export function Dapp(): any {
     //const [provider, setProvider] = useState('');
     //const [web3, setWeb3] = useState('');
+
     const [userAddress, setUserAddress] = useState('');
-
-
+    const [isMobile, setIsMobile] = useState(false);
 
     async function loadWeb3() {
-
         if (typeof window !== "undefined") {
             const web3Modal = new Web3Modal({
                 network: 'rinkeby', // optional
@@ -113,22 +170,54 @@ export function Dapp(): any {
 
     useEffect(() => {
         loadWeb3();
-    }, []);
+
+        if (typeof window != "undefined") {
+            if (window.innerWidth > 999) {
+                setIsMobile(false);
+            } else {
+                setIsMobile(true);
+            }
+        }
+    }, [isMobile]);
 
     return (
         <>
-            <Header>
-                <AccountButton>
-                    <User width={40} height={40} />
-                </AccountButton>
+            {!isMobile &&
+                <>
+                    <Header>
+                        <AccountButton>
+                            <User width={40} height={40} />
+                        </AccountButton>
 
-                <ConnectWallet onClick={() => loadWeb3()}>
-                    {userAddress && <> {parseUserAddress(userAddress)} </>}
-                    {!userAddress && <> Connect Wallet </>}
-                </ConnectWallet>
-            </Header>
+                        <ConnectWallet onClick={() => loadWeb3()}>
+                            {userAddress && <> {parseUserAddress(userAddress)} </>}
+                            {!userAddress && <> Connect Wallet </>}
+                        </ConnectWallet>
+                    </Header>
 
-            <Dashboard userAddress={userAddress} />
+                    <Dashboard userAddress={userAddress} />
+                </>
+            }
+
+            {isMobile &&
+                <>
+
+                    <HeaderMobile>
+                        <AccountButtonMobile>
+                            <User width={40} height={40} />
+                        </AccountButtonMobile>
+
+                        <ConnectWalletMobile onClick={() => loadWeb3()}>
+                            {userAddress && <> {parseUserAddress(userAddress)} </>}
+                            {!userAddress && <> Connect Wallet </>}
+                        </ConnectWalletMobile>
+                    </HeaderMobile>
+
+
+                    <MobileDashboard userAddress={userAddress} />
+                </>
+            }
+
         </>
     )
 

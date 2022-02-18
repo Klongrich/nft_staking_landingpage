@@ -5,6 +5,8 @@ import { Github } from "@styled-icons/boxicons-logos/Github";
 
 import { StyledIconBase } from '@styled-icons/styled-icon'
 
+import { useRouter } from "next/router";
+
 const IconStyleWrapper = styled.div`
 text-align: center;
   
@@ -271,6 +273,7 @@ function LandingPage() {
         window.scrollTo({ top: 82, behavior: 'smooth' });
     };
 
+    const router = useRouter();
 
     return (
         <>
@@ -315,7 +318,7 @@ function LandingPage() {
                     </AboutTextBox>
 
                     <ButtonBox>
-                        <LanuchAppButton>
+                        <LanuchAppButton onClick={() => router.push('/app')}>
                             <p>Lanuch App</p>
                         </LanuchAppButton>
 
