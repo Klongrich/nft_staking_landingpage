@@ -37,23 +37,21 @@ const CollectionsBox = styled.div`
     border: 2px solid black;
     border-radius: 10px;
 
-    padding-left: 20px;
-    padding-right: 20px;
-    
-    padding-top: 40px;
-    padding-bottom: 40px;
-
     margin-left: 80px;
     margin-right: 80px;
 
+    padding-top: 17px;
+
+    padding-left: 39px;
+    padding-right: 39px;
+
+    padding-bottom: 17px;
+    
     img {
         border: 2px solid black;
         border-radius: 15px;
 
-        margin-left: 40px;
-        margin-right: 40px;
-
-        margin-bottom: 40px;
+        margin: 39px;
 
         :hover {
             box-shadow: 0 0 10px black;

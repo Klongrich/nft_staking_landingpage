@@ -55,7 +55,7 @@ const ConnectWallet = styled.div`
 const AccountButton = styled.div`
     background-color: #F4A7A7;
 
-    height: 36px;
+    height: 35px;
     width: 44px;
     
     float: right;
@@ -64,8 +64,8 @@ const AccountButton = styled.div`
 
     margin-right: 90px;
 
-    padding-left: 8px;
-    padding-top: 8px;
+    padding-left: 6px;
+    padding-top: 9px;
 
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
@@ -170,7 +170,6 @@ export function Dapp(): any {
 
     useEffect(() => {
         loadWeb3();
-
         if (typeof window != "undefined") {
             if (window.innerWidth > 999) {
                 setIsMobile(false);
@@ -201,7 +200,6 @@ export function Dapp(): any {
 
             {isMobile &&
                 <>
-
                     <HeaderMobile>
                         <AccountButtonMobile>
                             <User width={40} height={40} />
@@ -213,11 +211,9 @@ export function Dapp(): any {
                         </ConnectWalletMobile>
                     </HeaderMobile>
 
-
                     <MobileDashboard userAddress={userAddress} />
                 </>
             }
-
         </>
     )
 

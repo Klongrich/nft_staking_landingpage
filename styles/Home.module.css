@@ -4,6 +4,7 @@
 
 .helloWorld{
   text-align: center;
+  width: 110%;
 }
 
 .main {
@@ -117,4 +118,6 @@
     width: 100%;
     flex-direction: column;
   }
+
+
 }
