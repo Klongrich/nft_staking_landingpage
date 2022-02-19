@@ -5,10 +5,13 @@ import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
-import { User } from "@styled-icons/boxicons-regular/User"
+import { User } from "@styled-icons/boxicons-regular/User";
+import { Backspace } from "@styled-icons/fluentui-system-regular/Backspace";
 
 import Dashboard from "./dashboard";
 import MobileDashboard from "./mobileDashboard";
+
+import Account from "./account";
 
 //Move infuraID to .env file
 const providerOptions = {
@@ -66,6 +69,32 @@ const AccountButton = styled.div`
 
     padding-left: 6px;
     padding-top: 9px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    :hover {
+        background-color: #FDC8C7;
+        cursor: pointer;
+    }
+
+`
+
+const BackArrow = styled.div`
+    background-color: #F4A7A7;
+
+    height: 35px;
+    width: 44px;
+    
+    float: right;
+
+    border: 1px solid black;
+
+    margin-right: 90px;
+
+    padding-left: 6px;
+
+    padding-top: 2px;
+    padding-bottom: 6px;
 
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
@@ -136,10 +165,12 @@ const AccountButtonMobile = styled.div`
 
 export function Dapp(): any {
     //const [provider, setProvider] = useState('');
-    //const [web3, setWeb3] = useState('');
 
-    const [userAddress, setUserAddress] = useState('');
+    const [web3, setWeb3] = useState(new Web3());
     const [isMobile, setIsMobile] = useState(false);
+    const [userAddress, setUserAddress] = useState('');
+
+    const [state, setState] = useState("Collections");
 
     async function loadWeb3() {
         if (typeof window !== "undefined") {
@@ -152,12 +183,10 @@ export function Dapp(): any {
             const provider = await web3Modal.connect();
             const web3 = await new Web3(provider);
 
-            // setProvider(provider);
-            // setWeb3(web3);
-
             if (web3) {
                 const EthAccounts = await web3.eth.getAccounts();
                 setUserAddress(EthAccounts[0]);
+                setWeb3(web3);
             } else {
                 console.log('web3 not found');
             }
@@ -168,8 +197,8 @@ export function Dapp(): any {
         return (address.substring(0, 4) + "...." + address.substring(38, 42));
     }
 
-    useEffect(() => {
-        loadWeb3();
+    useEffect(async () => {
+        await loadWeb3();
         if (typeof window != "undefined") {
             if (window.innerWidth > 999) {
                 setIsMobile(false);
@@ -181,38 +210,70 @@ export function Dapp(): any {
 
     return (
         <>
-            {!isMobile &&
-                <>
-                    <Header>
-                        <AccountButton>
-                            <User width={40} height={40} />
-                        </AccountButton>
 
-                        <ConnectWallet onClick={() => loadWeb3()}>
-                            {userAddress && <> {parseUserAddress(userAddress)} </>}
-                            {!userAddress && <> Connect Wallet </>}
-                        </ConnectWallet>
-                    </Header>
+            { state == "Collections" && <>
+                {!isMobile &&
+                    <>
+                        <Header>
+                            <AccountButton onClick={() => setState("Account")}>
+                                <User width={40} height={40} />
+                            </AccountButton>
 
-                    <Dashboard userAddress={userAddress} />
-                </>
+                            <ConnectWallet onClick={() => loadWeb3()}>
+                                {userAddress && <> {parseUserAddress(userAddress)} </>}
+                                {!userAddress && <> Connect Wallet </>}
+                            </ConnectWallet>
+                        </Header>
+
+                        <Dashboard userAddress={userAddress} />
+                    </>
+                }
+
+                {isMobile &&
+                    <>
+                        <HeaderMobile>
+                            <AccountButtonMobile>
+                                <User width={40} height={40} />
+                            </AccountButtonMobile>
+
+                            <ConnectWalletMobile onClick={() => loadWeb3()}>
+                                {userAddress && <> {parseUserAddress(userAddress)} </>}
+                                {!userAddress && <> Connect Wallet </>}
+                            </ConnectWalletMobile>
+                        </HeaderMobile>
+
+                        <MobileDashboard userAddress={userAddress} />
+                    </>
+                }
+            </>
             }
 
-            {isMobile &&
-                <>
-                    <HeaderMobile>
-                        <AccountButtonMobile>
-                            <User width={40} height={40} />
-                        </AccountButtonMobile>
+            { state == "Account" && <>
+                {!isMobile &&
+                    <>
 
-                        <ConnectWalletMobile onClick={() => loadWeb3()}>
-                            {userAddress && <> {parseUserAddress(userAddress)} </>}
-                            {!userAddress && <> Connect Wallet </>}
-                        </ConnectWalletMobile>
-                    </HeaderMobile>
+                        <Header>
+                            <BackArrow onClick={() => setState("Collections")}>
+                                <Backspace width={40} height={40} />
+                            </BackArrow>
 
-                    <MobileDashboard userAddress={userAddress} />
-                </>
+                            <ConnectWallet onClick={() => loadWeb3()}>
+                                {userAddress && <> {parseUserAddress(userAddress)} </>}
+                                {!userAddress && <> Connect Wallet </>}
+                            </ConnectWallet>
+                        </Header>
+
+                        <Account userAddress={userAddress}
+                            web3={web3} />
+
+                    </>
+                }
+                {isMobile &&
+                    <>
+
+                    </>
+                }
+            </>
             }
         </>
     )
