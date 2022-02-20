@@ -12,6 +12,7 @@ import Dashboard from "./dashboard";
 import MobileDashboard from "./mobileDashboard";
 
 import Account from "./account";
+import MobileAccount from "./accountMobile";
 
 //Move infuraID to .env file
 const providerOptions = {
@@ -78,6 +79,62 @@ const AccountButton = styled.div`
     }
 
 `
+
+const BackArrowMobile = styled.div`
+    background-color: #F4A7A7;
+
+    height: 30px;
+    width: 44px;
+
+    float: right;
+
+    border: 1px solid black;
+
+    margin-top: -25px;
+
+    margin-right: 30px;
+    padding-left: 8px;
+
+    padding-top: 0px;
+    padding-bottom: 8px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    :hover {
+        background-color: #FDC8C7;
+        cursor: pointer;
+    }
+`
+
+const ConnectWalletMobileAccount = styled.div`
+    background-color: #F4A7A7;
+
+    padding: 10px;
+    
+    width: 210px;
+    height: 20px;
+
+    text-align: center;
+
+    font-size: 22px;
+
+    border: 1px solid black;
+
+    margin-top: -25px;
+
+    margin-left: 30px;
+    margin-bottom: 40px;
+
+    float: left;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    :hover {
+        background-color: #FDC8C7;
+        cursor: pointer;
+    }
+    
+`
+
 
 const BackArrow = styled.div`
     background-color: #F4A7A7;
@@ -197,8 +254,8 @@ export function Dapp(): any {
         return (address.substring(0, 4) + "...." + address.substring(38, 42));
     }
 
-    useEffect(async () => {
-        await loadWeb3();
+    useEffect(() => {
+        loadWeb3();
         if (typeof window != "undefined") {
             if (window.innerWidth > 999) {
                 setIsMobile(false);
@@ -232,7 +289,7 @@ export function Dapp(): any {
                 {isMobile &&
                     <>
                         <HeaderMobile>
-                            <AccountButtonMobile>
+                            <AccountButtonMobile onClick={() => setState("Account")}>
                                 <User width={40} height={40} />
                             </AccountButtonMobile>
 
@@ -270,6 +327,19 @@ export function Dapp(): any {
                 }
                 {isMobile &&
                     <>
+                        <Header>
+                            <BackArrowMobile onClick={() => setState("Collections")}>
+                                <Backspace width={40} height={40} />
+                            </BackArrowMobile>
+
+                            <ConnectWalletMobileAccount onClick={() => loadWeb3()}>
+                                {userAddress && <> {parseUserAddress(userAddress)} </>}
+                                {!userAddress && <> Connect Wallet </>}
+                            </ConnectWalletMobileAccount>
+                        </Header>
+
+                        <MobileAccount userAddress={userAddress}
+                            web3={web3} />
 
                     </>
                 }

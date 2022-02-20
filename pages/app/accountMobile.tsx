@@ -15,7 +15,7 @@ background-color: #CDA3A6;
 width: 100%;
 margin-top: -40px;
 
-height: 1000px;
+height: 100%;
 
 h2 {
     width: 250px;
@@ -33,7 +33,10 @@ h2 {
 
 const PictureContainer = styled.div`
 
-margin: 50px;
+text-align: center;
+
+
+margin-top: 110px;
 
 img {
     margin: 20px;
@@ -55,6 +58,11 @@ const NoNFTSContainer = styled.div`
         padding-top: 5px;
         padding-bottom: 5px;
     }
+
+`
+
+const PictureBox = styled.div`
+
 
 `
 
@@ -80,7 +88,7 @@ export function Account({ userAddress, web3 }: any) {
             "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
         );
 
-        const nfts = await web3.alchemy.getNfts({ owner: userAddress })
+        const nfts = await web3.alchemy.getNfts({ owner: "0x83baf7c1b4ba0a4fcdb7c20120c60b858fda55f3" })
 
         if (nfts.ownedNfts.length <= 0) {
             alert("No NFTs found");
@@ -114,20 +122,21 @@ export function Account({ userAddress, web3 }: any) {
 
             <Container>
                 <h2> User NFTs </h2>
+                <PictureContainer>
+                    {hasNFTs && <>
+                        <PictureBox>
+                            {userNFTs.map((data) =>
+                                <>
+                                    {data.name != null && <>
+                                        <img src={checkIPFShash(data.image)} alt='' height={120} width={120} />
+                                    </>}
 
-                {hasNFTs && <>
-                    <PictureContainer>
-                        {userNFTs.map((data) =>
-                            <>
-                                {data.name != null && <>
-                                    <img src={checkIPFShash(data.image)} alt='' height={120} width={120} />
-                                </>}
+                                </>
+                            )}
+                        </PictureBox>
 
-                            </>
-                        )}
-                    </PictureContainer>
-                </>}
-
+                    </>}
+                </PictureContainer>
                 {!hasNFTs &&
                     <>
                         <NoNFTSContainer>
