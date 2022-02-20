@@ -88,7 +88,7 @@ export function Account({ userAddress, web3 }: any) {
             "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
         );
 
-        const nfts = await web3.alchemy.getNfts({ owner: "0x83baf7c1b4ba0a4fcdb7c20120c60b858fda55f3" })
+        const nfts = await web3.alchemy.getNfts({ owner: userAddress })
 
         if (nfts.ownedNfts.length <= 0) {
             alert("No NFTs found");
