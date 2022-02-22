@@ -39,15 +39,8 @@ h2 {
 const PictureContainer = styled.div`
 
 text-align: center;
-
-
 margin-top: 110px;
 
-img {
-    margin: 20px;
-    border: 1px solid black;
-    border-radius: 10px;
-}
 
 `
 
@@ -67,9 +60,10 @@ const NoNFTSContainer = styled.div`
 `
 
 const PictureBox = styled.div`
+    width: 150px;
+    height: 150px;
 
-
-
+    display: inline-block;
 `
 
 var ImageList = [{ image: "" }];
@@ -143,9 +137,11 @@ export function Account({ userAddress, web3 }: any) {
                     {hasNFTs && hasLoaded && <>
                         {ImageList.map((data) =>
                             <>
-                                {data.image != null && data.image != "" && <>
-                                    <Image src={checkIPFShash(data.image)} alt='' height={120} width={120} />
-                                </>}
+                                <PictureBox>
+                                    {data.image != null && data.image != "" && <>
+                                        <Image src={checkIPFShash(data.image)} alt='' height={120} width={120} />
+                                    </>}
+                                </PictureBox>
 
                             </>
                         )}
