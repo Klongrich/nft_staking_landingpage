@@ -3,6 +3,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
+
+
+
+
 const Header = styled.div`
     background-color: #F4A7A7;
     height: 40px;

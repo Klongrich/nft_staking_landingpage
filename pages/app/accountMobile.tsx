@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import Image from "next/image";
+
+import Spinner from "./coloredSpinner.gif";
+
 
 const Header = styled.div`
 background-color: #F4A7A7;
@@ -64,13 +69,16 @@ const NoNFTSContainer = styled.div`
 const PictureBox = styled.div`
 
 
+
 `
+
+var ImageList = [{ image: "" }];
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
 export function Account({ userAddress, web3 }: any) {
 
-    const [userNFTs, setUserNFTs] = useState([{ name: null, image: null }]);
     const [hasNFTs, setHashNFTs] = useState(true);
+    const [hasLoaded, setHasLoaded] = useState(false);
 
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
@@ -84,32 +92,42 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     async function getUserNFTs() {
+
         const web3 = createAlchemyWeb3(
             "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
         );
 
         const nfts = await web3.alchemy.getNfts({ owner: userAddress })
 
-        if (nfts.ownedNfts.length <= 0) {
-            alert("No NFTs found");
-            setHashNFTs(false);
-            return (0);
+        // if (nfts.ownedNfts.length <= 0) {
+        //     alert("No NFTs found");
+        //     setHashNFTs(false);
+        //     return (0);
+        // }
+
+        const storage = getStorage();
+        //This is just a test array, idea is to query for tokenIDs from alchemy then create calls to qurey the images.
+        let tokenIDArray = [0, 10, 1000, 1001, 1002, 1005, 1008, 1006, 1009];
+
+        //Resetting ImageList
+        ImageList = [{ image: "" }];
+
+        for (let i = 0; i < tokenIDArray.length; i++) {
+            const imagesRef = ref(storage, tokenIDArray[i] + ".png")
+            console.log(tokenIDArray[i])
+
+            //Retreive the ImageURL through firbase using anaymouns AUTH
+            var _URL = await getDownloadURL(imagesRef);
+
+            var temp = {
+                image: _URL
+            }
+
+            ImageList.push(temp);
         }
 
-        for (let i = 0; i < nfts.ownedNfts.length; i++) {
-            console.log(nfts.ownedNfts[i].contract.address);
-            console.log(parseInt(nfts.ownedNfts[i].id.tokenId, 16));
-
-            let TokenID = parseInt(nfts.ownedNfts[i].id.tokenId, 16);
-
-            const response = await web3.alchemy.getNftMetadata({
-                contractAddress: nfts.ownedNfts[i].contract.address,
-                tokenId: TokenID.toString()
-            });
-
-            //@ts-ignore
-            setUserNFTs(userNFTs => [...userNFTs, response.metadata])
-        }
+        setHasLoaded(true);
+        console.log(nfts.ownedNfts);
     }
 
     useEffect(() => {
@@ -119,22 +137,25 @@ export function Account({ userAddress, web3 }: any) {
     return (
         <>
             <Header />
-
             <Container>
                 <h2> User NFTs </h2>
                 <PictureContainer>
-                    {hasNFTs && <>
-                        <PictureBox>
-                            {userNFTs.map((data) =>
-                                <>
-                                    {data.name != null && <>
-                                        <img src={checkIPFShash(data.image)} alt='' height={120} width={120} />
-                                    </>}
+                    {hasNFTs && hasLoaded && <>
+                        {ImageList.map((data) =>
+                            <>
+                                {data.image != null && data.image != "" && <>
+                                    <Image src={checkIPFShash(data.image)} alt='' height={120} width={120} />
+                                </>}
 
-                                </>
-                            )}
-                        </PictureBox>
+                            </>
+                        )}
 
+                    </>}
+                    {hasNFTs && !hasLoaded && <>
+                        <div>
+                            <Image src={"/coloredSpinner.gif"} alt='' height={170} width={170} />
+                            <p> Loading User NFTs ... Please Wait .......</p>
+                        </div>
                     </>}
                 </PictureContainer>
                 {!hasNFTs &&
@@ -159,7 +180,6 @@ export function Account({ userAddress, web3 }: any) {
             <p> Hello World </p>
         </>
     )
-
 }
 
 export default Account;

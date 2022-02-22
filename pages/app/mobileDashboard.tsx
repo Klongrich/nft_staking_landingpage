@@ -19,7 +19,7 @@ const Container = styled.div`
     padding-top: 20px;
 
     text-align: center;
-    
+
     h2 {
         font-size: 45px;
         text-decoration: underline;
