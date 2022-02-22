@@ -137,12 +137,11 @@ export function Account({ userAddress, web3 }: any) {
                     {hasNFTs && hasLoaded && <>
                         {ImageList.map((data) =>
                             <>
-                                <PictureBox>
-                                    {data.image != null && data.image != "" && <>
+                                {data.image != null && data.image != "" && <>
+                                    <PictureBox>
                                         <Image src={checkIPFShash(data.image)} alt='' height={120} width={120} />
-                                    </>}
-                                </PictureBox>
-
+                                    </PictureBox>
+                                </>}
                             </>
                         )}
 
