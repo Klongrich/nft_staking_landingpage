@@ -68,7 +68,8 @@ const SpinnerBox = styled.div`
     p {
         padding: 50px;
         font-size: 24px;
-        font-weigth: bold;
+        font-weigth: bolder;
+        line-height: 1.8
     }
 
     padding-bottom: 500px;
@@ -160,7 +161,7 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     useEffect(() => {
-        getUserNFTs();
+        //getUserNFTs();
     }, [])
 
     return (
