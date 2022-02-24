@@ -326,11 +326,11 @@ function LandingPage() {
                 </div>
 
                 <div className="HowItWorks">
-                    <img src="HowItWorks3.png" alt="" width="90%" />
+                    <img src="HowItWorks4.png" alt="" width="90%" />
                 </div>
 
                 <div className="RoadMapContainer">
-                    <img src="RoadmapMobile6.png" alt='' width="100%" />
+                    <img src="RoadmapMobile7.png" alt='' width="100%" />
                 </div>
 
                 <div className="TeamContainer">
