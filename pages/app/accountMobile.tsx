@@ -38,16 +38,21 @@ const PictureContainer = styled.div`
 `
 
 const NoNFTSContainer = styled.div`
+    margin-top: -70px;
     padding: 30px;
+    font-size: 28px;
 
     ul {
         list-style-type: none;
+        padding-bottom: 15px;
     }
 
     li {
         padding-top: 5px;
         padding-bottom: 5px;
     }
+
+    line-height: 1.5;
 `
 
 const PictureBox = styled.div`
@@ -81,8 +86,8 @@ var ImageList = [{ image: "" }];
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
 export function Account({ userAddress, web3 }: any) {
 
-    const [hasNFTs, setHashNFTs] = useState(true);
-    const [hasLoaded, setHasLoaded] = useState(false);
+    const [hasNFTs, setHashNFTs] = useState(false);
+    const [hasLoaded, setHasLoaded] = useState(true);
 
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
@@ -111,12 +116,18 @@ export function Account({ userAddress, web3 }: any) {
             alert("Alchemy API Error");
         }
 
-        //Checks if Users given wallet address has any NFTs returned from AlchemyWeb3 call
-        // if (nfts.ownedNfts.length <= 0) {
-        //     alert("No NFTs found");
-        //     setHashNFTs(false);
-        //     return (0);
-        // }
+        //  Checks if Users given wallet address has any NFTs returned from AlchemyWeb3 call
+
+        if (nfts) {
+            if (nfts.ownedNfts.length <= 0) {
+                alert("No NFTs found");
+                setHashNFTs(false);
+                return (0);
+            }
+        } else {
+            console.log("NFTs not returend from Alchemey Call");
+            alert("No Alchemy Data");
+        }
 
         const storage = getStorage();
         //This is just a test array, idea is to query for tokenIDs from alchemy then create calls to qurey the images.
@@ -153,7 +164,7 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     useEffect(() => {
-        getUserNFTs();
+        // getUserNFTs();
     }, [])
 
     return (
@@ -184,9 +195,9 @@ export function Account({ userAddress, web3 }: any) {
                 {!hasNFTs &&
                     <>
                         <NoNFTSContainer>
-                            <p> This Account Does not have any NFTs yet! </p>
+                            <p> This Account does not have any NFTs yet! </p>
 
-                            <p> Purchase one today from our partners!</p>
+                            <p> Purchase one today from our partners.</p>
 
                             <ul>
                                 <a href="https://opensea.io"><li>opensea</li> </a>
