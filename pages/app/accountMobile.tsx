@@ -5,9 +5,6 @@ import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import Image from "next/image";
 
-import Spinner from "./coloredSpinner.gif";
-
-
 const Header = styled.div`
 background-color: #F4A7A7;
 height: 40px;
@@ -30,6 +27,7 @@ h2 {
     line-height: 45px;
     margin-left: 30px;
     padding-top: 40px;
+    padding-bottom: 20px;
     text-decoration: underline;
 }
 
@@ -66,6 +64,25 @@ const PictureBox = styled.div`
     display: inline-block;
 `
 
+const SpinnerBox = styled.div`
+    p {
+        padding: 50px;
+        font-size: 24px;
+        font-weigth: bold;
+    }
+
+    padding-bottom: 500px;
+`
+
+const LOL = styled.div`
+text-align: center;
+background-color: black;
+color: white;
+padding-top: 8px;
+padding-bottom: 8px;
+
+`
+
 var ImageList = [{ image: "" }];
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
@@ -91,8 +108,17 @@ export function Account({ userAddress, web3 }: any) {
             "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
         );
 
-        const nfts = await web3.alchemy.getNfts({ owner: userAddress })
+        let nfts;
 
+        try {
+            const tempNFTs = await web3.alchemy.getNfts({ owner: userAddress })
+            nfts = tempNFTs;
+        } catch {
+            console.log("alchemy API call errror");
+            alert("Alchemy API Error");
+        }
+
+        //Checks if Users given wallet address has any NFTs returned from AlchemyWeb3 call
         // if (nfts.ownedNfts.length <= 0) {
         //     alert("No NFTs found");
         //     setHashNFTs(false);
@@ -111,17 +137,26 @@ export function Account({ userAddress, web3 }: any) {
             console.log(tokenIDArray[i])
 
             //Retreive the ImageURL through firbase using anaymouns AUTH
-            var _URL = await getDownloadURL(imagesRef);
+            var _URL = "";
+
+            try {
+                _URL = await getDownloadURL(imagesRef);
+            } catch {
+                console.log("Firebase API Error");
+                alert("Firebase API Error");
+            }
 
             var temp = {
                 image: _URL
             }
-
             ImageList.push(temp);
         }
 
         setHasLoaded(true);
-        console.log(nfts.ownedNfts);
+
+        if (nfts) {
+            console.log(nfts.ownedNfts);
+        }
     }
 
     useEffect(() => {
@@ -147,10 +182,10 @@ export function Account({ userAddress, web3 }: any) {
 
                     </>}
                     {hasNFTs && !hasLoaded && <>
-                        <div>
-                            <Image src={"/coloredSpinner.gif"} alt='' height={170} width={170} />
-                            <p> Loading User NFTs ... Please Wait .......</p>
-                        </div>
+                        <SpinnerBox>
+                            <Image src={"/ColoredSpinner2.gif"} alt='' height={170} width={170} />
+                            <p> Loading User NFTs ...... Please Wait .......</p>
+                        </SpinnerBox>
                     </>}
                 </PictureContainer>
                 {!hasNFTs &&
@@ -172,7 +207,10 @@ export function Account({ userAddress, web3 }: any) {
                     </>
                 }
             </Container>
-            <p> Hello World </p>
+
+            <LOL>
+                <p> Hello World </p>
+            </LOL>
         </>
     )
 }
