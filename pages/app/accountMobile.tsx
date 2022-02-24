@@ -87,8 +87,8 @@ var ImageList = [{ image: "" }];
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
 export function Account({ userAddress, web3 }: any) {
 
-    const [hasNFTs, setHashNFTs] = useState(false);
-    const [hasLoaded, setHasLoaded] = useState(true);
+    const [hasNFTs, setHashNFTs] = useState(true);
+    const [hasLoaded, setHasLoaded] = useState(false);
 
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
@@ -164,7 +164,7 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     useEffect(() => {
-        // getUserNFTs();
+        getUserNFTs();
     }, [])
 
     return (
