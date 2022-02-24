@@ -6,44 +6,38 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import Image from "next/image";
 
 const Header = styled.div`
-background-color: #F4A7A7;
-height: 40px;
-width: 100%;
-margin-top: 0px;
+    background-color: #F4A7A7;
+    height: 40px;
+    width: 100%;
+    margin-top: 0px;
 `
 
 const Container = styled.div`
-background-color: #CDA3A6;
-width: 100%;
-margin-top: -40px;
+    background-color: #CDA3A6;
+    width: 100%;
+    margin-top: -40px;
 
-height: 100%;
+    height: 100%;
 
-h2 {
-    width: 250px;
-    height: 42px;
-    font-family: Roboto;
-    font-size: 48px;
-    line-height: 45px;
-    margin-left: 30px;
-    padding-top: 40px;
-    padding-bottom: 20px;
-    text-decoration: underline;
-}
-
-
+    h2 {
+        width: 250px;
+        height: 42px;
+        font-family: Roboto;
+        font-size: 48px;
+        line-height: 45px;
+        margin-left: 30px;
+        padding-top: 40px;
+        padding-bottom: 20px;
+        text-decoration: underline;
+    }
 `
 
 const PictureContainer = styled.div`
-
-text-align: center;
-margin-top: 110px;
-
-
+    text-align: center;
+    margin-top: 110px;
 `
 
 const NoNFTSContainer = styled.div`
-
     padding: 30px;
 
     ul {
@@ -54,7 +48,6 @@ const NoNFTSContainer = styled.div`
         padding-top: 5px;
         padding-bottom: 5px;
     }
-
 `
 
 const PictureBox = styled.div`
@@ -76,12 +69,11 @@ const SpinnerBox = styled.div`
 `
 
 const LOL = styled.div`
-text-align: center;
-background-color: black;
-color: white;
-padding-top: 8px;
-padding-bottom: 8px;
-
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
 `
 
 var ImageList = [{ image: "" }];
@@ -161,7 +153,7 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     useEffect(() => {
-        //getUserNFTs();
+        getUserNFTs();
     }, [])
 
     return (
