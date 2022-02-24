@@ -40,7 +40,7 @@ const PictureContainer = styled.div`
 const NoNFTSContainer = styled.div`
     margin-top: -70px;
     padding: 30px;
-    font-size: 28px;
+    font-size: 26px;
 
     ul {
         list-style-type: none;
@@ -50,6 +50,7 @@ const NoNFTSContainer = styled.div`
     li {
         padding-top: 5px;
         padding-bottom: 5px;
+        margin-left: -36px;
     }
 
     line-height: 1.5;
@@ -86,8 +87,8 @@ var ImageList = [{ image: "" }];
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
 export function Account({ userAddress, web3 }: any) {
 
-    const [hasNFTs, setHashNFTs] = useState(true);
-    const [hasLoaded, setHasLoaded] = useState(false);
+    const [hasNFTs, setHashNFTs] = useState(false);
+    const [hasLoaded, setHasLoaded] = useState(true);
 
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
@@ -117,10 +118,8 @@ export function Account({ userAddress, web3 }: any) {
         }
 
         //  Checks if Users given wallet address has any NFTs returned from AlchemyWeb3 call
-
         if (nfts) {
             if (nfts.ownedNfts.length <= 0) {
-                alert("No NFTs found");
                 setHashNFTs(false);
                 return (0);
             }
@@ -153,6 +152,7 @@ export function Account({ userAddress, web3 }: any) {
             var temp = {
                 image: _URL
             }
+
             ImageList.push(temp);
         }
 
@@ -164,7 +164,7 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     useEffect(() => {
-        getUserNFTs();
+        // getUserNFTs();
     }, [])
 
     return (
