@@ -19,6 +19,8 @@ const Container = styled.div`
 
     height: 100%;
 
+    padding-bottom: 50px;
+
     h2 {
         width: 250px;
         height: 42px;
@@ -29,6 +31,19 @@ const Container = styled.div`
         padding-top: 40px;
         padding-bottom: 20px;
         text-decoration: underline;
+    }
+
+    ul {
+        list-style-type: none;
+        margin-left: 120px;
+    }
+
+    li {
+        float: left;
+        padding-left: 15px;
+        padding-right: 15px;
+
+        font-size: 22px;
     }
 `
 
@@ -56,12 +71,37 @@ const NoNFTSContainer = styled.div`
     line-height: 1.5;
 `
 
+const NFTImagesBox = styled.div`
+    background-color: #CD8285;
+
+    margin-top: -20px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 50px;
+
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+`
+
 const PictureBox = styled.div`
     width: 150px;
     height: 150px;
 
+    margin: 42px;
+
+    border: 2px solid black;
+    border-radius: 20px;
+
     display: inline-block;
+
+    :hover {
+        border: 2px solid blue;
+    }
 `
+
+
 
 const SpinnerBox = styled.div`
     p {
@@ -71,7 +111,83 @@ const SpinnerBox = styled.div`
         line-height: 1.8
     }
 
-    padding-bottom: 500px;
+    background-color: #CD8285;
+
+    padding-top: 50px;
+
+    margin-top: -20px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 50px;
+
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+`
+
+const StakingMetaBox = styled.div`
+    background-color: #CD8285;
+    border-radius: 20px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    display: inline-block;
+
+    padding-bottom: 30px;
+
+
+`
+
+const ActionButton = styled.div`
+background-color: #F4A7A7;
+
+width: 190px;
+height: 25px;
+
+text-align: center;
+
+font-size: 22px;
+margin-top: 20px;
+margin-left: -20px;
+padding: 10px;
+
+border: 1px solid black;
+
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+:hover {
+    background-color: #FDC8C7;
+    cursor: pointer;
+}
+
+display: inline-block;
+
+
+`
+
+const MetaBox = styled.div`
+    text-align: center;
+    float: left;
+
+    h3 {
+        padding-top: 20px;
+        font-size: 28px;
+    }
+
+    height: 350px;
+    width: 530px;
+
+    li {
+        float: none;
+        text-align: left;
+
+        font-size: 24px;
+
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
 `
 
 const LOL = styled.div`
@@ -130,7 +246,7 @@ export function Account({ userAddress, web3 }: any) {
 
         const storage = getStorage();
         //This is just a test array, idea is to query for tokenIDs from alchemy then create calls to qurey the images.
-        let tokenIDArray = [1, 10, 1000, 950, 402, 35, 18, 106, 409];
+        let tokenIDArray = [1, 10, 1000, 950, 402, 35, 18, 106, 409, 714];
 
         //Resetting ImageList
         ImageList = [{ image: "" }];
@@ -163,11 +279,6 @@ export function Account({ userAddress, web3 }: any) {
         }
     }
 
-    function uploadNFTImages() {
-        console.log("Hello World");
-        // 'file' comes from the Blob or File API
-    }
-
     useEffect(() => {
         getUserNFTs();
     }, [])
@@ -177,26 +288,82 @@ export function Account({ userAddress, web3 }: any) {
             <Header />
             <Container>
                 <h2> User NFTs </h2>
+
+                <ul>
+                    <li>Select All</li>
+                    <li>Collections (5) </li>
+                    <li>NFTs (150)</li>
+                </ul>
+
                 <PictureContainer>
-                    {hasNFTs && hasLoaded && <>
-                        {ImageList.map((data) =>
-                            <>
-                                {data.image != null && data.image != "" && <>
-                                    <PictureBox>
-                                        <Image src={checkIPFShash(data.image)} alt='' height={120} width={120} />
-                                    </PictureBox>
-                                </>}
-                            </>
-                        )}
+                    {hasNFTs && <>
+
+                        {hasLoaded &&  <>
+
+                            <NFTImagesBox>
+                            {ImageList.map((data) =>
+                                <>
+                                    {data.image != null && data.image != "" && <>
+                                        <PictureBox>
+                                            <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
+                                        </PictureBox>
+                                    </>}
+                                </>)}
+                            </NFTImagesBox>
+
+                        </>}
+
+
+                        {!hasLoaded && <>
+                            <SpinnerBox>
+                                <Image src={"/ColoredSpinner2.gif"} alt='' height={170} width={170} />
+                                <p> Loading User NFTs ...... Please Wait .......</p>
+                            </SpinnerBox>
+                        </>}
+
+                        <StakingMetaBox>
+
+                            <MetaBox>
+                                <h3> Estaminted Earnings: </h3>
+
+                                <ul>
+                                    <li>$24.17 / Day</li>
+                                    <li>$170.12 / Week</li>
+                                    <li>650.12 / Month </li>
+                                </ul>
+
+                                <ActionButton> Stake </ActionButton>
+                            </MetaBox>
+
+                            <MetaBox>
+                                <h3> Current Earnings: </h3>
+
+                                <ul>
+                                    <li>$24.17 / Day</li>
+                                    <li>$170.12 / Week</li>
+                                    <li>650.12 / Month </li>
+                                </ul>
+
+                                <ActionButton> Unstake </ActionButton>
+                            </MetaBox>
+
+                            <MetaBox>
+                                <h3> Amount To Claim:</h3>
+
+                                <ul>
+                                    <li> -------------------- </li>
+                                    <li> $134,020.42 </li>
+                                    <li> -------------------- </li>
+                                </ul>
+
+                                <ActionButton> Claim </ActionButton>
+                            </MetaBox>
+
+                        </StakingMetaBox>
 
                     </>}
-                    {hasNFTs && !hasLoaded && <>
-                        <SpinnerBox>
-                            <Image src={"/ColoredSpinner2.gif"} alt='' height={170} width={170} />
-                            <p> Loading User NFTs ...... Please Wait .......</p>
-                        </SpinnerBox>
-                    </>}
                 </PictureContainer>
+
                 {!hasNFTs &&
                     <>
                         <NoNFTSContainer>

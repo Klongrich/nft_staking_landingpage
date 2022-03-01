@@ -10,6 +10,7 @@
   "dependencies": {
     "@alch/alchemy-web3": "^1.2.4",
     "@apollo/client": "^3.5.9",
+    "@react-native-firebase/storage": "^14.5.0",
     "@walletconnect/web3-provider": "^1.7.1",
     "firebase": "^9.6.7",
     "graphql": "^16.3.0",

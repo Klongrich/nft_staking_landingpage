@@ -13,6 +13,7 @@ import MobileDashboard from "./mobileDashboard";
 
 import Account from "./account";
 import MobileAccount from "./accountMobile";
+import Staking from "./staking";
 
 //Move infuraID to .env file
 const providerOptions = {
@@ -272,7 +273,7 @@ export function Dapp(): any {
                 {!isMobile &&
                     <>
                         <Header>
-                            <AccountButton onClick={() => setState("Account")}>
+                            <AccountButton onClick={() => setState("Staking")}>
                                 <User width={40} height={40} />
                             </AccountButton>
 
@@ -345,6 +346,24 @@ export function Dapp(): any {
                 }
             </>
             }
+
+            {state == "Staking" && <>
+                {!isMobile &&<>
+                    <Header>
+                            <BackArrow onClick={() => setState("Collections")}>
+                                <Backspace width={40} height={40} />
+                            </BackArrow>
+
+                            <ConnectWallet onClick={() => loadWeb3()}>
+                                {userAddress && <> {parseUserAddress(userAddress)} </>}
+                                {!userAddress && <> Connect Wallet </>}
+                            </ConnectWallet>
+                        </Header>
+
+                        <Staking userAddress={userAddress}
+                                 web3={web3}/>
+                </>}
+            </>}
         </>
     )
 
