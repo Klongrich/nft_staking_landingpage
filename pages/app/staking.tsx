@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
+import SampleABI from "./Staking.json"
 
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import Image from "next/image";
+
+const ONE_ETHER = 1000000000000000000;
 
 const Header = styled.div`
     background-color: #F4A7A7;
@@ -75,6 +78,34 @@ const NoNFTSContainer = styled.div`
     line-height: 1.5;
 `
 
+const AllNFTImagesBox = styled.div`
+    background-color: #CD8285;
+
+    margin-top: -90px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 50px;
+
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+    padding-bottom: 20px;
+
+    h4 {
+        font-size: 20px;
+        text-decoration: underline;
+        text-align: right;
+        margin-right: 50px;
+        margin-bottom: 10px;
+
+        :hover {
+            cursor: pointer;
+        }
+    }
+
+`
+
 const NFTImagesBox = styled.div`
     background-color: #CD8285;
 
@@ -90,6 +121,19 @@ const NFTImagesBox = styled.div`
     height: 420px;
 
     overflow: hidden;
+
+    h4 {
+        position: absolute;
+        top: 575px;
+        left: 89%;
+
+        text-decoration: underline;
+        font-size: 20px;
+
+        :hover {
+            cursor: pointer;
+        }
+    }
 `
 
 const PictureBox = styled.div`
@@ -99,7 +143,7 @@ const PictureBox = styled.div`
     margin-left: 42px;
     margin-right: 42px;
 
-    margin-top: 30px;
+    margin-top: 35px;
 
     border: 4px solid ${(props) => props.color};
     border-radius: 20px;
@@ -272,6 +316,10 @@ export function Account({ userAddress, web3 }: any) {
     const [amountSelected, setAmountSelected] = useState(0);
     const [stakeSelected, setStakeSelected] = useState(false);
 
+    const [displayAll, setDisplayAll] = useState(false);
+    const [totalNFTs, setTotalNFTs] = useState(0);
+    const [loadedNFTs, setLoadedNFTs] = useState(0);
+
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
 
@@ -316,7 +364,7 @@ export function Account({ userAddress, web3 }: any) {
         }
     }
 
-    async function updateSelectedNFTs(tokenID : string, collection : string, index : number, image: string, selected: boolean) { 
+    async function updateSelectedNFT(tokenID : string, collection : string, index : number, image: string, selected: boolean) { 
         let updatedArray = [...userNFTs];
 
         updatedArray[index] = {
@@ -341,6 +389,68 @@ export function Account({ userAddress, web3 }: any) {
         }
     }
 
+    async function submit_stake() {
+        // if (web3.currentProvider.networkVerison === "1") {
+        //     console.log("Connected To Mainnet Network");
+        //     alert("Switch To Rinkey Testnet")
+        // }
+
+        // console.log("provider: " + web3.currentProvider.networkVerison);
+
+        // if (web3.currentProvider.networkVerison === "4") {
+        //     console.log("Connected To Rinkeby Network");
+
+        //     const Ethaccounts = await web3.eth.getAccounts();
+
+        //     const SampleContract = new web3.eth.Contract(
+        //         SampleABI.abi,
+        //         "0x4D43b5457835144cAf1D3aC526eFB75D44651218"
+        //     );
+
+        //     await SampleContract.methods
+        //     .stake_eth()
+        //     .send({ from: Ethaccounts[0], value: (0.0001 *  ONE_ETHER)})
+        //     .once("receipt", (receipt : any) => {
+        //         console.log(receipt);
+        //         console.log("transaction hash" + receipt.transactionHash);
+        //     });
+        // }
+
+        const Ethaccounts = await web3.eth.getAccounts();
+
+        const SampleContract = new web3.eth.Contract(
+            SampleABI.abi,
+            "0x4D43b5457835144cAf1D3aC526eFB75D44651218"
+        );
+
+        await SampleContract.methods
+        .stake_eth()
+        .send({ from: Ethaccounts[0], value: (0.0001 *  ONE_ETHER)})
+        .once("receipt", (receipt : any) => {
+            console.log(receipt);
+            console.log("transaction hash" + receipt.transactionHash);
+        });
+    }
+
+    // async function submit_unstake() {
+    //     console.log(await web3.eth.getAccounts());
+
+    //     const Ethaccounts = await web3.eth.getAccounts();
+
+    //     const SampleContract = new web3.eth.Contract(
+    //       SampleABI.abi,
+    //       "0x4D43b5457835144cAf1D3aC526eFB75D44651218"
+    //     );
+
+    //     await SampleContract.methods
+    //       .stake_eth()
+    //       .send({ from: Ethaccounts[0], value: (0.0001 *  ONE_ETHER)})
+    //       .once("receipt", (receipt : any) => {
+    //         console.log(receipt);
+    //         console.log("transaction hash" + receipt.transactionHash);
+    //       });
+    // }
+
     async function getUserNFTs() {
 
         const web3 = createAlchemyWeb3(
@@ -349,29 +459,32 @@ export function Account({ userAddress, web3 }: any) {
 
         let nfts;
 
-        try {
-            const tempNFTs = await web3.alchemy.getNfts({ owner: userAddress })
-            nfts = tempNFTs;
-        } catch {
-            console.log("alchemy API call errror");
-            alert("Alchemy API Error");
-        }
-
-        //  Checks if Users given wallet address has any NFTs returned from AlchemyWeb3 call
-        if (nfts) {
-            if (nfts.ownedNfts.length <= 0) {
-                setHashNFTs(false);
-                return (0);
+        if (userAddress) {
+            try {
+                const tempNFTs = await web3.alchemy.getNfts({ owner: "0x5f119A1b0A2874C8cADE0C7d96E33033FE6F1d28" })
+                nfts = tempNFTs;
+            } catch {
+                console.log("alchemy API call errror");
+                alert("Alchemy API Error");
             }
-        } else {
-            console.log("NFTs not returend from Alchemey Call");
-            alert("No Alchemy Data");
+
+            //  Checks if Users given wallet address has any NFTs returned from AlchemyWeb3 call
+            if (nfts) {
+                if (nfts.ownedNfts.length <= 0) {
+                    setHashNFTs(false);
+                    return (0);
+                }
+            } else {
+                console.log("NFTs not returend from Alchemey Call");
+                alert("No Alchemy Data");
+            }
         }
 
         const storage = getStorage();
         //This is just a test array, idea is to query for tokenIDs from alchemy then create calls to qurey the images.
-        let tokenIDArray = [10, 1000, 950, 402, 35, 18, 106, 409, 714, 21];
+        let tokenIDArray = [10, 1000, 950, 402, 35, 18, 106, 409, 714, 82, 100, 42, 32, 84, 99, 304, 495];
 
+        setTotalNFTs(tokenIDArray.length);
         //Resetting ImageList
         ImageList = [{ image: "" , tokenID: "", collection: "", selected: false}];
 
@@ -397,6 +510,7 @@ export function Account({ userAddress, web3 }: any) {
             }
 
             ImageList.push(temp);
+            setLoadedNFTs(i);
         }
 
         setUserNFTs(ImageList);
@@ -428,15 +542,15 @@ export function Account({ userAddress, web3 }: any) {
                 <PictureContainer>
                     {hasNFTs && <>
 
-                        {hasLoaded &&  <>
-
+                        {hasLoaded && !displayAll &&  <>
                             <NFTImagesBox>
+                            <h4 onClick={() => setDisplayAll(true)}> See All </h4>
                             {userNFTs.map((data, index) =>
                                 <>
                                     {data.image != null && data.image != "" && <>
                                         {!data.selected && <>
                                         <PictureBox color={"black"}
-                                                    onClick={() => updateSelectedNFTs(data.tokenID, data.collection, index, data.image, true)}>
+                                                    onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.image, true)}>
                                             <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
                                         </PictureBox>
                                         </>}
@@ -444,7 +558,7 @@ export function Account({ userAddress, web3 }: any) {
 
                                         {data.selected && <>
                                         <PictureBox color={"blue"}
-                                                    onClick={() => updateSelectedNFTs(data.tokenID, data.collection, index, data.image, false)}>
+                                                    onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.image, false)}>
                                             <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
                                         </PictureBox>
                                         </>}
@@ -454,10 +568,37 @@ export function Account({ userAddress, web3 }: any) {
 
                         </>}
 
+                        {hasLoaded && displayAll &&  <>
+                            <AllNFTImagesBox>
+                            {userNFTs.map((data, index) =>
+                            <>
+                                {data.image != null && data.image != "" && <>
+                                    {!data.selected && <>
+                                        <PictureBox color={"black"}
+                                                    onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.image, true)}>
+                                        <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
+                                    </PictureBox>
+                                </>}
+
+                                {data.selected && <>
+                                    <PictureBox color={"blue"}
+                                                onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.image, false)}>
+                                    <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
+                                    </PictureBox>
+                                </>}
+                            </>}
+                        </>)}
+                        <h4 onClick={() => setDisplayAll(false)}> Close </h4>
+                        </AllNFTImagesBox>
+
+                    </>}
+
 
                         {!hasLoaded && <>
                             <SpinnerBox>
                                 <Image src={"/ColoredSpinner2.gif"} alt='' height={170} width={170} />
+
+                                <p> Loading all : {totalNFTs} / {loadedNFTs} </p>
                                 <p> Loading User NFTs ...... Please Wait .......</p>
                             </SpinnerBox>
                         </>}
@@ -478,7 +619,8 @@ export function Account({ userAddress, web3 }: any) {
                                 </>}
 
                                 {stakeSelected && <>
-                                    <SelectedActionButton color={"#FDC8C7 "}> Stake </SelectedActionButton>
+                                    <SelectedActionButton onClick={() => submit_stake()}
+                                        color={"#FDC8C7 "}> Stake </SelectedActionButton>
                                 </>}
 
                             </MetaBox>
@@ -492,7 +634,7 @@ export function Account({ userAddress, web3 }: any) {
                                     <li>650.12 / Month </li>
                                 </ul>
 
-                                <ActionButton color={"#F4A7A7"}> Unstake </ActionButton>
+                                <ActionButton onClick={() => submit_stake()} color={"#F4A7A7"}> Unstake </ActionButton>
                             </MetaBox>
 
                             <MetaBox>

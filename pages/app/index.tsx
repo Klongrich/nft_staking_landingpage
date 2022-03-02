@@ -246,6 +246,11 @@ export function Dapp(): any {
             const provider = await web3Modal.connect();
             const web3 = await new Web3(provider);
 
+            provider.on("accountsChanged", (accounts: string[]) => {
+                console.log(accounts);
+                setUserAddress(accounts[0]);
+            });
+
             if (web3) {
                 const EthAccounts = await web3.eth.getAccounts();
                 setUserAddress(EthAccounts[0]);
@@ -366,7 +371,8 @@ export function Dapp(): any {
                         </StakingHeader>
 
                         <Staking userAddress={userAddress}
-                                 web3={web3}/>
+                                 web3={web3}
+                        />
                 </>}
             </>}
         </>
