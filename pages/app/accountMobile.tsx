@@ -82,12 +82,34 @@ const LOL = styled.div`
     padding-bottom: 8px;
 `
 
+const PartnersBox = styled.div`
+    text-align: center;
+
+    margin-top: 40px;
+
+    img {
+        border: 2px solid black;
+        border-radius: 10px;
+    }
+
+    a {
+        display: inline-block;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    p {
+        font-size: 20px;
+    }
+
+`
+
 var ImageList = [{ image: "" }];
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
 export function Account({ userAddress, web3 }: any) {
 
-    const [hasNFTs, setHashNFTs] = useState(true);
+    const [hasNFTs, setHashNFTs] = useState(false);
     const [hasLoaded, setHasLoaded] = useState(false);
 
     function checkIPFShash(imageURL: any) {
@@ -169,7 +191,7 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     useEffect(() => {
-        getUserNFTs();
+       // getUserNFTs();
     }, [])
 
     return (
@@ -204,12 +226,32 @@ export function Account({ userAddress, web3 }: any) {
 
                             <p> Purchase one today from our partners.</p>
 
-                            <ul>
-                                <a href="https://opensea.io"><li>opensea</li> </a>
-                                <a href="https://rarible.com/"><li>rareabile</li> </a>
+                            <PartnersBox>
+                            <a href="https://opensea.io">
+                                <img src="/opensea_logo.png" alt="" height={190} width={190} />
+                                <p>OpenSea</p>
+                            </a>
+
+                            <a href="https://looksrare.org">
+                                <img src="/LooksRareLogo.jpeg" alt="" height={190} width={190} />
+                                <p>Looks Rare</p>
+                            </a>
+
+                            <a href="https://zora.co">
+                                <img src="/Zora.jpeg" alt="" height={190} width={190} />
+                                <p>Zora</p>
+                            </a>
+
+                            <a href="https://rarible.com">
+                                <img src="/RaribleLogo.png" alt="" height={190} width={190} />
+                                <p>Rarible</p>
+                            </a>
+                            </PartnersBox>
+
+                                {/* <a href="https://rarible.com/"><li>rareabile</li> </a>
                                 <a href="https://zora.co/"><li>Zora </li> </a>
-                                <a href="https://looksrare.org/"><li>Looks Rare </li></a>
-                            </ul>
+                                <a href="https://looksrare.org/"><li>Looks Rare </li></a> */}
+
 
                             <p> Or Disconnect Web3 wallet and connect to one with NFTs</p>
                         </NoNFTSContainer>
