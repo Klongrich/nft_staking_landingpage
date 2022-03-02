@@ -9,7 +9,6 @@ const Header = styled.div`
     background-color: #F4A7A7;
     height: 40px;
     width: 100%;
-    margin-top: 0px;
 `
 
 const Container = styled.div`
@@ -44,6 +43,11 @@ const Container = styled.div`
         padding-right: 15px;
 
         font-size: 22px;
+
+        :hover {
+            cursor: pointer;
+            color: grey;
+        }
     }
 `
 
@@ -74,7 +78,7 @@ const NoNFTSContainer = styled.div`
 const NFTImagesBox = styled.div`
     background-color: #CD8285;
 
-    margin-top: -20px;
+    margin-top: -90px;
     margin-left: 100px;
     margin-right: 100px;
     margin-bottom: 50px;
@@ -83,22 +87,34 @@ const NFTImagesBox = styled.div`
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
 
+    height: 420px;
+
+    overflow: hidden;
 `
 
 const PictureBox = styled.div`
     width: 150px;
     height: 150px;
 
-    margin: 42px;
+    margin-left: 42px;
+    margin-right: 42px;
 
-    border: 2px solid black;
+    margin-top: 30px;
+
+    border: 4px solid ${(props) => props.color};
     border-radius: 20px;
 
     display: inline-block;
 
     :hover {
-        border: 2px solid blue;
+        box-shadow: 0 0 10px black;
+        cursor: pointer;
+        transition-timing-function: ease-in;
+        transition: 0.2s;
+        transform: scale(1.03);
     }
+
+    overflow: hidden;
 `
 
 
@@ -115,7 +131,7 @@ const SpinnerBox = styled.div`
 
     padding-top: 50px;
 
-    margin-top: -20px;
+    margin-top: -90px;
     margin-left: 100px;
     margin-right: 100px;
     margin-bottom: 50px;
@@ -123,6 +139,8 @@ const SpinnerBox = styled.div`
     border-radius: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
+
+    height: 350px;
 
 `
 
@@ -134,13 +152,11 @@ const StakingMetaBox = styled.div`
 
     display: inline-block;
 
-    padding-bottom: 30px;
-
-
+    padding-bottom: 0px;
 `
 
 const ActionButton = styled.div`
-background-color: #F4A7A7;
+background-color: ${(props) => props.color};
 
 width: 190px;
 height: 25px;
@@ -152,7 +168,34 @@ margin-top: 20px;
 margin-left: -20px;
 padding: 10px;
 
-border: 1px solid black;
+border: 1 solid black;
+
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+:hover {
+    background-color: #FDC8C7;
+    cursor: pointer;
+}
+
+display: inline-block;
+
+
+`
+
+const SelectedActionButton = styled.div`
+background-color: ${(props) => props.color};
+
+width: 190px;
+height: 25px;
+
+text-align: center;
+
+font-size: 22px;
+margin-top: 20px;
+margin-left: -20px;
+padding: 10px;
+
+border: 2px solid blue;
 
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
@@ -198,13 +241,36 @@ const LOL = styled.div`
     padding-bottom: 8px;
 `
 
-var ImageList = [{ image: "" }];
+const FilterBar = styled.div`
+    height: 40px;
+    margin-top: -30px;
+`
+
+var ImageList = [{ image: "", tokenID: "", collection: "", selected: false}];
+
+var SelectedNFTs = [
+    {
+        Collection : "holder",
+        tokenID : "0"
+    }
+];
+
+var UserNFTs = [{ image: "", tokenID: "", collection: "", selected: false}];
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
 export function Account({ userAddress, web3 }: any) {
 
     const [hasNFTs, setHashNFTs] = useState(true);
     const [hasLoaded, setHasLoaded] = useState(false);
+
+    const [userNFTs, setUserNFTs] = useState(UserNFTs);
+    const [selectedNFTs, setSelectedNFTs] = useState(SelectedNFTs);
+
+    const [perDay, setPerDay] = useState(100);
+    const [claimAmount, setClaimAmount] = useState("");
+
+    const [amountSelected, setAmountSelected] = useState(0);
+    const [stakeSelected, setStakeSelected] = useState(false);
 
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
@@ -214,6 +280,64 @@ export function Account({ userAddress, web3 }: any) {
             return ("https://ipfs.io/ipfs/" + rawIPFShash);
         } else {
             return (imageURL);
+        }
+    }
+
+    //Calculate how much a NFT will earn per day with the contract address and tokenID
+    //Passed as paramters, selected will tell you if your adding or subtracting
+    //These are dev notes for people trying to read this I guess
+    function updateEarningsPerDay(collection : any, tokenID : any, selected: any) {
+        if (selected) {
+            setPerDay(perDay + 1);
+        } else {
+            setPerDay(perDay - 1);
+        }
+    }
+
+    function selectAllNFTs(){
+        let newArray = [...userNFTs];
+
+        if (!stakeSelected) {
+            for (let i = 0; i < userNFTs.length; i++) {
+                newArray[i].selected = true;
+            }
+            setUserNFTs(newArray);
+            setPerDay(userNFTs.length + 90)
+            setStakeSelected(true);
+            setAmountSelected(userNFTs.length - 1);
+        } else {
+            for(let i = 0; i < userNFTs.length; i++) {
+                newArray[i].selected = false
+            }
+            setUserNFTs(newArray);
+            setPerDay(0)
+            setStakeSelected(false);
+            setAmountSelected(0);
+        }
+    }
+
+    async function updateSelectedNFTs(tokenID : string, collection : string, index : number, image: string, selected: boolean) { 
+        let updatedArray = [...userNFTs];
+
+        updatedArray[index] = {
+            image : image,
+            tokenID: tokenID,
+            collection: "hey",
+            selected: selected
+        };
+
+        updateEarningsPerDay(collection, tokenID, selected);
+        setUserNFTs(updatedArray);
+
+        if (!selected) {
+            let tempCheck = amountSelected - 1;
+            if (tempCheck <= 0) {
+                setStakeSelected(false);
+            }
+            setAmountSelected(amountSelected - 1);
+        } else {
+            setAmountSelected(amountSelected + 1)
+            setStakeSelected(true);
         }
     }
 
@@ -246,10 +370,10 @@ export function Account({ userAddress, web3 }: any) {
 
         const storage = getStorage();
         //This is just a test array, idea is to query for tokenIDs from alchemy then create calls to qurey the images.
-        let tokenIDArray = [1, 10, 1000, 950, 402, 35, 18, 106, 409, 714];
+        let tokenIDArray = [10, 1000, 950, 402, 35, 18, 106, 409, 714, 21];
 
         //Resetting ImageList
-        ImageList = [{ image: "" }];
+        ImageList = [{ image: "" , tokenID: "", collection: "", selected: false}];
 
         for (let i = 0; i < tokenIDArray.length; i++) {
             const imagesRef = ref(storage, "/ChubbiFrens/chubbi" + tokenIDArray[i] + ".png")
@@ -266,12 +390,16 @@ export function Account({ userAddress, web3 }: any) {
             }
 
             var temp = {
-                image: _URL
+                image: _URL,
+                tokenID : tokenIDArray[i].toString(),
+                collection : "0x42f1654B8eeB80C96471451B1106b63D0B1a9fe1",
+                selected : false
             }
 
             ImageList.push(temp);
         }
 
+        setUserNFTs(ImageList);
         setHasLoaded(true);
 
         if (nfts) {
@@ -289,11 +417,13 @@ export function Account({ userAddress, web3 }: any) {
             <Container>
                 <h2> User NFTs </h2>
 
+                <FilterBar>
                 <ul>
-                    <li>Select All</li>
+                    <li onClick={() => selectAllNFTs()}>Select All</li>
                     <li>Collections (5) </li>
                     <li>NFTs (150)</li>
                 </ul>
+                </FilterBar>
 
                 <PictureContainer>
                     {hasNFTs && <>
@@ -301,12 +431,23 @@ export function Account({ userAddress, web3 }: any) {
                         {hasLoaded &&  <>
 
                             <NFTImagesBox>
-                            {ImageList.map((data) =>
+                            {userNFTs.map((data, index) =>
                                 <>
                                     {data.image != null && data.image != "" && <>
-                                        <PictureBox>
+                                        {!data.selected && <>
+                                        <PictureBox color={"black"}
+                                                    onClick={() => updateSelectedNFTs(data.tokenID, data.collection, index, data.image, true)}>
                                             <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
                                         </PictureBox>
+                                        </>}
+
+
+                                        {data.selected && <>
+                                        <PictureBox color={"blue"}
+                                                    onClick={() => updateSelectedNFTs(data.tokenID, data.collection, index, data.image, false)}>
+                                            <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
+                                        </PictureBox>
+                                        </>}
                                     </>}
                                 </>)}
                             </NFTImagesBox>
@@ -327,12 +468,19 @@ export function Account({ userAddress, web3 }: any) {
                                 <h3> Estaminted Earnings: </h3>
 
                                 <ul>
-                                    <li>$24.17 / Day</li>
-                                    <li>$170.12 / Week</li>
-                                    <li>650.12 / Month </li>
+                                    <li>${perDay} / Day</li>
+                                    <li>${(perDay * 7)} / Week</li>
+                                    <li>${(perDay * 30)} / Month </li>
                                 </ul>
 
-                                <ActionButton> Stake </ActionButton>
+                                {!stakeSelected && <>
+                                    <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
+                                </>}
+
+                                {stakeSelected && <>
+                                    <SelectedActionButton color={"#FDC8C7 "}> Stake </SelectedActionButton>
+                                </>}
+
                             </MetaBox>
 
                             <MetaBox>
@@ -344,19 +492,19 @@ export function Account({ userAddress, web3 }: any) {
                                     <li>650.12 / Month </li>
                                 </ul>
 
-                                <ActionButton> Unstake </ActionButton>
+                                <ActionButton color={"#F4A7A7"}> Unstake </ActionButton>
                             </MetaBox>
 
                             <MetaBox>
                                 <h3> Amount To Claim:</h3>
 
                                 <ul>
-                                    <li> -------------------- </li>
-                                    <li> $134,020.42 </li>
-                                    <li> -------------------- </li>
+                                    <li> ----------------------- </li>
+                                    <li> | | | $134,020.42 | | | </li>
+                                    <li> ----------------------- </li>
                                 </ul>
 
-                                <ActionButton> Claim </ActionButton>
+                                <ActionButton color={"#F4A7A7"}> Claim </ActionButton>
                             </MetaBox>
 
                         </StakingMetaBox>

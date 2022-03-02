@@ -30,6 +30,11 @@ const Header = styled.div`
     margin-bottom : -95px;
 `
 
+const StakingHeader = styled.div`
+    padding-top: 95px;
+    margin-bottom : -95px;
+`
+
 const ConnectWallet = styled.div`
     background-color: #F4A7A7;
 
@@ -349,7 +354,7 @@ export function Dapp(): any {
 
             {state == "Staking" && <>
                 {!isMobile &&<>
-                    <Header>
+                    <StakingHeader>
                             <BackArrow onClick={() => setState("Collections")}>
                                 <Backspace width={40} height={40} />
                             </BackArrow>
@@ -358,7 +363,7 @@ export function Dapp(): any {
                                 {userAddress && <> {parseUserAddress(userAddress)} </>}
                                 {!userAddress && <> Connect Wallet </>}
                             </ConnectWallet>
-                        </Header>
+                        </StakingHeader>
 
                         <Staking userAddress={userAddress}
                                  web3={web3}/>
