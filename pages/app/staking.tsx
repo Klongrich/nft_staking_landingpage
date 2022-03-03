@@ -5,6 +5,7 @@ import SampleABI from "./Staking.json"
 
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import Image from "next/image";
+import ProgressBar from "./progressBar";
 
 const ONE_ETHER = 1000000000000000000;
 
@@ -136,6 +137,29 @@ const NFTImagesBox = styled.div`
     }
 `
 
+const NONFTImagesBox = styled.div`
+    background-color: #CD8285;
+
+    margin-top: -90px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 50px;
+
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+    height: 420px;
+
+    padding-top: 10px;
+
+    h3 {
+        padding-top: 0px;
+        text-align: center;
+        font-size: 25px;
+    }
+`
+
 const PictureBox = styled.div`
     width: 150px;
     height: 150px;
@@ -161,11 +185,38 @@ const PictureBox = styled.div`
     overflow: hidden;
 `
 
+const CollectionBox = styled.div`
+    width: 150px;
+    height: 150px;
+
+    margin-left: 58px;
+    margin-right: 58px;
+
+    margin-top: 120px;
+
+    border: 4px solid black;
+
+    display: inline-block;
+
+    :hover {
+        box-shadow: 0 0 10px black;
+        cursor: pointer;
+        transition-timing-function: ease-in;
+        transition: 0.2s;
+        transform: scale(1.03);
+    }
+
+    overflow: hidden;
+`
+
 
 
 const SpinnerBox = styled.div`
     p {
-        padding: 50px;
+        padding-top: 20px;
+        padding-bottom: 50px;
+        padding-left: 50px;
+        padding-right: 50px;
         font-size: 24px;
         font-weigth: bolder;
         line-height: 1.8
@@ -195,6 +246,19 @@ const StakingMetaBox = styled.div`
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
     display: inline-block;
+
+    padding-bottom: 0px;
+`
+
+const StakingMetaBoxNONFTS = styled.div`
+    background-color: #CD8285;
+    border-radius: 20px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    display: inline-block;
+
+    margin-left: 90px;
 
     padding-bottom: 0px;
 `
@@ -290,7 +354,39 @@ const FilterBar = styled.div`
     margin-top: -30px;
 `
 
-var ImageList = [{ image: "", tokenID: "", collection: "", selected: false}];
+const PartnersBox = styled.div`
+    text-align: center;
+
+    margin-top: 40px;
+
+    img {
+        border: 2px solid black;
+        border-radius: 10px;
+    }
+
+    a {
+        display: inline-block;
+        margin-left: 45px;
+        margin-right: 45px;
+    }
+
+    p {
+        font-size: 20px;
+    }
+`
+
+const ProgressBarWrapper = styled.div`
+    width: 500px;
+    display: inline-block;
+    padding-right: 100px;
+
+    p {
+        margin-top: -50px;
+        margin-left: 82px;
+    }
+`
+
+var ImageList = [{ metadata: {image: ""}, tokenID: "", collection: "", selected: false}];
 
 var SelectedNFTs = [
     {
@@ -302,7 +398,7 @@ var SelectedNFTs = [
 var UserNFTs = [{ image: "", tokenID: "", collection: "", selected: false}];
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
-export function Account({ userAddress, web3 }: any) {
+export function Account({ userAddress, web3, provider }: any) {
 
     const [hasNFTs, setHashNFTs] = useState(true);
     const [hasLoaded, setHasLoaded] = useState(false);
@@ -319,6 +415,23 @@ export function Account({ userAddress, web3 }: any) {
     const [displayAll, setDisplayAll] = useState(false);
     const [totalNFTs, setTotalNFTs] = useState(0);
     const [loadedNFTs, setLoadedNFTs] = useState(0);
+
+    const [progress, setProgress] = useState(0);
+
+    const [userCollections, setUserCollections] = useState([{image: "/collections/azuki.jpg"}])
+    const [showCollections, setShowCollections] = useState(false);
+    const [userCollectionTotal, setUserCollectionTotal] = useState(0);
+
+    const [userNFTsTotal, setUserNFTsTotal] = useState(0);
+    const [userChubbisTotal, setUserChubbisTotal] = useState(0);
+
+    const [AlchemeyData, setAlchemeyData] = useState([{metadata: {image : ""}, tokenID : "", collection: "", selected: false }]);
+    const [hasWallet, setHasWallet] = useState(false);
+
+
+    const [chubbisLoading, setChubbisLoading] = useState(false);
+    const [totalChubbis, setTotalChubbis] = useState(0);
+    const [loadedChubbis, setLoadedChubbis] = useState(0);
 
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
@@ -343,21 +456,21 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     function selectAllNFTs(){
-        let newArray = [...userNFTs];
+        let newArray = [...AlchemeyData];
 
         if (!stakeSelected) {
-            for (let i = 0; i < userNFTs.length; i++) {
+            for (let i = 0; i < AlchemeyData.length; i++) {
                 newArray[i].selected = true;
             }
-            setUserNFTs(newArray);
-            setPerDay(userNFTs.length + 90)
+            setAlchemeyData(newArray);
+            setPerDay(AlchemeyData.length + 90)
             setStakeSelected(true);
-            setAmountSelected(userNFTs.length - 1);
+            setAmountSelected(AlchemeyData.length - 1);
         } else {
-            for(let i = 0; i < userNFTs.length; i++) {
+            for(let i = 0; i < AlchemeyData.length; i++) {
                 newArray[i].selected = false
             }
-            setUserNFTs(newArray);
+            setAlchemeyData(newArray);
             setPerDay(0)
             setStakeSelected(false);
             setAmountSelected(0);
@@ -365,17 +478,17 @@ export function Account({ userAddress, web3 }: any) {
     }
 
     async function updateSelectedNFT(tokenID : string, collection : string, index : number, image: string, selected: boolean) { 
-        let updatedArray = [...userNFTs];
+        let updatedArray = [...AlchemeyData];
 
         updatedArray[index] = {
-            image : image,
+            metadata : {image : image},
             tokenID: tokenID,
-            collection: "hey",
+            collection: "Chubbiverse Frens",
             selected: selected
         };
 
         updateEarningsPerDay(collection, tokenID, selected);
-        setUserNFTs(updatedArray);
+        setAlchemeyData(updatedArray);
 
         if (!selected) {
             let tempCheck = amountSelected - 1;
@@ -432,97 +545,241 @@ export function Account({ userAddress, web3 }: any) {
         });
     }
 
-    // async function submit_unstake() {
-    //     console.log(await web3.eth.getAccounts());
 
-    //     const Ethaccounts = await web3.eth.getAccounts();
+    function getLoadingIncerment(totalNFTs : any) {
+        console.log("Incerment: " + ((1 / totalNFTs) * 100));
+        return((1 / totalNFTs) * 100);
+    }
 
-    //     const SampleContract = new web3.eth.Contract(
-    //       SampleABI.abi,
-    //       "0x4D43b5457835144cAf1D3aC526eFB75D44651218"
-    //     );
+    function loadUserCollections() {
+        if (showCollections) {
+            setShowCollections(false);
+        } else {
 
-    //     await SampleContract.methods
-    //       .stake_eth()
-    //       .send({ from: Ethaccounts[0], value: (0.0001 *  ONE_ETHER)})
-    //       .once("receipt", (receipt : any) => {
-    //         console.log(receipt);
-    //         console.log("transaction hash" + receipt.transactionHash);
-    //       });
-    // }
+            let _CollectionDataExample = [
+                {
+                    image: "/collections/azuki.jpg"
+                },
+                {
+                    image: "/collections/BAYC.png"
+                },
+                {
+                    image: "/collections/coolcats.jpg"
+                },
+                {
+                    image: "/collections/CryptoChicks.jpg"
+                },
+                {
+                    image: "/collections/CryptoCoven.jpg"
+                }
+            ];
+
+            setUserCollections(_CollectionDataExample);
+            setShowCollections(true);
+        }
+    }
+
+    function _zeroTotals() {
+        setUserNFTsTotal(0);
+        setUserCollectionTotal(0);
+        setUserChubbisTotal(0);
+    }
+
+    async function getAlchemyData() {
+        if (userAddress) {
+            try {
+                const web3 = createAlchemyWeb3(
+                    "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
+                );
+                const userNFTs = await web3.alchemy.getNfts({ owner: "0xA7f71DbB40a67e410860171D287E7B45Df64180F"});
+
+                if (userNFTs) {
+                    if (userNFTs.ownedNfts.length <= 0) {
+                        setHashNFTs(false);
+                        _zeroTotals();
+                        return (0);
+                    }
+
+                    for(let i = 0; i < userNFTs.ownedNfts.length; i++) {
+                        //@ts-ignore
+                        console.log("ImageURL: " + userNFTs.ownedNfts[i].metadata.image);
+                    }
+                    //@ts-ignore
+                    setAlchemeyData(userNFTs.ownedNfts);
+                    setUserNFTsTotal(userNFTs.ownedNfts.length);
+                    console.log(userNFTs.ownedNfts);
+                    setHasLoaded(true);
+                    setHashNFTs(true);
+                } else {
+                    console.log("NFTs not returend from Alchemey Call");
+                    alert("No Alchemy Data");
+                }
+            } catch {
+                console.log("Alchemy Error");
+                alert("Alchemey Error");
+            }
+        }
+    }
+
+
+    async function getAlchemyDataChubbis(userAddress : any) {
+        if (userAddress) {
+            try {
+                const web3 = createAlchemyWeb3(
+                    "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
+                );
+
+                const userNFTs = await web3.alchemy.getNfts({ owner: userAddress, contractAddresses: ["0x42f1654b8eeb80c96471451b1106b63d0b1a9fe1"] });
+
+                if (userNFTs) {
+                    if (userNFTs.ownedNfts.length <= 0) {
+                        setHashNFTs(false);
+                        _zeroTotals();
+                        return (0);
+                    }
+                    //@ts-ignore
+
+                    //Resetting ImageList
+                    ImageList = [{ metadata: { image: ""} , tokenID: "", collection: "", selected: false}];
+
+                    for (let i = 0; i < userNFTs.ownedNfts.length; i++) {
+                        //@ts-ignore
+                        let _URL = userNFTs.ownedNfts[i].metadata.image;
+                        //@ts-ignore
+                        let _tokenID = userNFTs.ownedNfts[i].id.tokenId;
+
+                        var temp = {
+                            metadata : { image: _URL} ,
+                            tokenID : _tokenID,
+                            collection : "0x42f1654B8eeB80C96471451B1106b63D0B1a9fe1",
+                            selected : false
+                        }
+
+                        ImageList.push(temp);
+                    }
+                    console.log(ImageList);
+                    //@ts-ignore
+                    setAlchemeyData(ImageList);
+                    setUserChubbisTotal(userNFTs.ownedNfts.length);
+                    console.log(userNFTs.ownedNfts);
+                    setHasLoaded(true);
+                    setHashNFTs(true);
+
+                    const userNFTcount = await web3.alchemy.getNfts({owner: userAddress});
+                    setUserNFTsTotal(userNFTcount.ownedNfts.length);
+
+                } else {
+                    console.log("NFTs not returend from Alchemey Call");
+                    alert("No Alchemy Data");
+                }
+            } catch {
+                console.log("Alchemy Error");
+                alert("Alchemey Error");
+            }
+        }
+    }
 
     async function getUserNFTs() {
 
-        const web3 = createAlchemyWeb3(
-            "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
-        );
+        //let tokenIDArray = [10, 1000, 950, 402, 35, 18, 106, 409, 714, 82, 100, 42, 32, 84, 99, 304, 495];
 
-        let nfts;
+        let tokenIDArray = [42];
 
         if (userAddress) {
             try {
-                const tempNFTs = await web3.alchemy.getNfts({ owner: "0x5f119A1b0A2874C8cADE0C7d96E33033FE6F1d28" })
-                nfts = tempNFTs;
+                const web3 = createAlchemyWeb3(
+                    "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
+                );
+                const userNFTs = await web3.alchemy.getNfts({ owner: userAddress, contractAddresses: ["0x42f1654b8eeb80c96471451b1106b63d0b1a9fe1"] });
+
+                if (userNFTs) {
+                    if (userNFTs.ownedNfts.length <= 0) {
+                        setHashNFTs(false);
+                        _zeroTotals();
+                        return (0);
+                    }
+                } else {
+                    console.log("NFTs not returend from Alchemey Call");
+                    alert("No Alchemy Data");
+                }
+
+                console.log(userNFTs.ownedNfts);
+                setUserNFTsTotal(userNFTs.ownedNfts.length);
+
+                let totalChubbis = userNFTs.ownedNfts.length;
+
+                //Loop Through All The Users Chubbi NFTs
+                for (let x = 0; x < userNFTs.ownedNfts.length; x++) {
+                        tokenIDArray.push(parseInt(userNFTs.ownedNfts[x].id.tokenId, 16))
+                }
+
+                if (totalChubbis > 0) {
+                    // const storage = getStorage();
+                    // setTotalNFTs(tokenIDArray.length);
+        
+                    // //Resetting ImageList
+                    // ImageList = [{ image: "" , tokenID: "", collection: "", selected: false}];
+        
+                    // for (let i = 0; i < tokenIDArray.length; i++) {
+                    //     const imagesRef = ref(storage, "/ChubbiFrens/chubbi" + tokenIDArray[i] + ".png")
+        
+                    //     //Retreive the ImageURL through firbase using anaymouns AUTH
+                    //     var _URL = "";
+        
+                    //     try {
+                    //         _URL = await getDownloadURL(imagesRef);
+                    //     } catch {
+                    //         console.log("Firebase API Error");
+                    //         alert("Firebase API Error");
+                    //     }
+        
+                    //     var temp = {
+                    //         image: _URL,
+                    //         tokenID : tokenIDArray[i].toString(),
+                    //         collection : "0x42f1654B8eeB80C96471451B1106b63D0B1a9fe1",
+                    //         selected : false
+                    //     }
+        
+                    //     ImageList.push(temp);
+                    //     setLoadedNFTs(i);
+                    // }
+        
+                    // setHasLoaded(true);
+                    // setUserNFTs(ImageList);
+                }
+
+                console.log("total chubbis: " + totalChubbis);
+                setTotalChubbis(totalChubbis);
+                setHashNFTs(true);
             } catch {
                 console.log("alchemy API call errror");
                 alert("Alchemy API Error");
             }
-
-            //  Checks if Users given wallet address has any NFTs returned from AlchemyWeb3 call
-            if (nfts) {
-                if (nfts.ownedNfts.length <= 0) {
-                    setHashNFTs(false);
-                    return (0);
-                }
-            } else {
-                console.log("NFTs not returend from Alchemey Call");
-                alert("No Alchemy Data");
-            }
-        }
-
-        const storage = getStorage();
-        //This is just a test array, idea is to query for tokenIDs from alchemy then create calls to qurey the images.
-        let tokenIDArray = [10, 1000, 950, 402, 35, 18, 106, 409, 714, 82, 100, 42, 32, 84, 99, 304, 495];
-
-        setTotalNFTs(tokenIDArray.length);
-        //Resetting ImageList
-        ImageList = [{ image: "" , tokenID: "", collection: "", selected: false}];
-
-        for (let i = 0; i < tokenIDArray.length; i++) {
-            const imagesRef = ref(storage, "/ChubbiFrens/chubbi" + tokenIDArray[i] + ".png")
-            console.log(tokenIDArray[i])
-
-            //Retreive the ImageURL through firbase using anaymouns AUTH
-            var _URL = "";
-
-            try {
-                _URL = await getDownloadURL(imagesRef);
-            } catch {
-                console.log("Firebase API Error");
-                alert("Firebase API Error");
-            }
-
-            var temp = {
-                image: _URL,
-                tokenID : tokenIDArray[i].toString(),
-                collection : "0x42f1654B8eeB80C96471451B1106b63D0B1a9fe1",
-                selected : false
-            }
-
-            ImageList.push(temp);
-            setLoadedNFTs(i);
-        }
-
-        setUserNFTs(ImageList);
-        setHasLoaded(true);
-
-        if (nfts) {
-            console.log(nfts.ownedNfts);
         }
     }
 
     useEffect(() => {
-        getUserNFTs();
+        //getUserNFTs();
+        //getAlchemyData();
+
+        if (!userAddress) {
+            setHasWallet(false);
+            setHashNFTs(false);
+        } else {
+            getAlchemyDataChubbis(userAddress);
+            //getAlchemyData();
+            setHasWallet(true);
+            provider.on("accountsChanged", (accounts: string[]) => {
+                if (!accounts[0]) {
+                    setHasWallet(false);
+                    setHashNFTs(false);
+                } else {
+                    getAlchemyDataChubbis(accounts[0]);
+                    //getAlchemyData();
+                    setHasWallet(true);
+                }
+        });
+    }
     }, [])
 
     return (
@@ -534,72 +791,95 @@ export function Account({ userAddress, web3 }: any) {
                 <FilterBar>
                 <ul>
                     <li onClick={() => selectAllNFTs()}>Select All</li>
-                    <li>Collections (5) </li>
-                    <li>NFTs (150)</li>
+                    <li onClick={() => loadUserCollections()}>Collections ({userCollectionTotal}) </li>
+                    <li onClick={() => console.log("Update To Pull All UsersNFTs")}>NFTs ({userNFTsTotal})</li>
+                    <li onClick={() =>  getAlchemyDataChubbis(userAddress)}>Chubbis ({userChubbisTotal})</li>
                 </ul>
                 </FilterBar>
 
                 <PictureContainer>
                     {hasNFTs && <>
 
-                        {hasLoaded && !displayAll &&  <>
+                        {showCollections && hasLoaded && !displayAll && <>
+                                <NFTImagesBox>
+                                    {userCollections.map((data) =>
+                                        <>
+                                            <CollectionBox>
+                                                <Image src={data.image} alt='' height={180} width={180} />
+                                            </CollectionBox>
+                                        </>
+                                    )}
+                                </NFTImagesBox>
+                        </>}
+
+                        {hasLoaded && !displayAll && !showCollections &&  <>
                             <NFTImagesBox>
                             <h4 onClick={() => setDisplayAll(true)}> See All </h4>
-                            {userNFTs.map((data, index) =>
+                            {AlchemeyData.map((data, index) =>
                                 <>
-                                    {data.image != null && data.image != "" && <>
+                                    {data.metadata.image != null && data.metadata.image != "" && <>
+                                        {/* <PictureBox color={"black"}>
+                                            <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                        </PictureBox> */}
+
                                         {!data.selected && <>
                                         <PictureBox color={"black"}
-                                                    onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.image, true)}>
-                                            <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
+                                                    onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, true)}>
+                                            <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
                                         </PictureBox>
                                         </>}
 
 
                                         {data.selected && <>
                                         <PictureBox color={"blue"}
-                                                    onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.image, false)}>
-                                            <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
+                                                    onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, false)}>
+                                            <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
                                         </PictureBox>
                                         </>}
+
                                     </>}
                                 </>)}
                             </NFTImagesBox>
-
                         </>}
 
-                        {hasLoaded && displayAll &&  <>
+                        {hasLoaded && displayAll && !showCollections && <>
                             <AllNFTImagesBox>
-                            {userNFTs.map((data, index) =>
-                            <>
-                                {data.image != null && data.image != "" && <>
-                                    {!data.selected && <>
-                                        <PictureBox color={"black"}
-                                                    onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.image, true)}>
-                                        <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
+                            {AlchemeyData.map((data, index) => <>
+                                {data.metadata.image != null && data.metadata.image != "" && <>
+                                        {/* <PictureBox color={"black"}>
+                                            <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                        </PictureBox> */}
+
+
+                                {!data.selected && <>
+                                    <PictureBox color={"black"}
+                                                onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, true)}>
+                                        <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
                                     </PictureBox>
                                 </>}
 
                                 {data.selected && <>
                                     <PictureBox color={"blue"}
-                                                onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.image, false)}>
-                                    <Image src={checkIPFShash(data.image)} alt='' height={180} width={180} />
+                                                onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, false)}>
+                                        <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
                                     </PictureBox>
-                                </>}
-                            </>}
-                        </>)}
+                                    </>}
+                                    </>}
+                            </>)}
+
                         <h4 onClick={() => setDisplayAll(false)}> Close </h4>
                         </AllNFTImagesBox>
 
                     </>}
 
-
                         {!hasLoaded && <>
                             <SpinnerBox>
-                                <Image src={"/ColoredSpinner2.gif"} alt='' height={170} width={170} />
-
-                                <p> Loading all : {totalNFTs} / {loadedNFTs} </p>
-                                <p> Loading User NFTs ...... Please Wait .......</p>
+                                 <Image src={"/ColoredSpinner3.gif"} alt='' height={170} width={170} />
+                                <br />
+                                <ProgressBarWrapper>
+                                    <ProgressBar bgcolor="#F4A7A7" progress={getLoadingIncerment(totalNFTs) * loadedNFTs} height={20} />
+                                    <p> Loading all : {totalNFTs} / {loadedNFTs} </p>
+                                </ProgressBarWrapper>
                             </SpinnerBox>
                         </>}
 
@@ -650,28 +930,96 @@ export function Account({ userAddress, web3 }: any) {
                             </MetaBox>
 
                         </StakingMetaBox>
-
                     </>}
                 </PictureContainer>
 
+
+
                 {!hasNFTs &&
                     <>
-                        <NoNFTSContainer>
-                            <p> This Account does not have any NFTs yet! </p>
+                        {hasWallet && <>
+                        <NONFTImagesBox>
+                            <h3> This Account does not have any NFTs yet! </h3>
+                            <h3> Purchase one today from our partners. </h3>
 
-                            <p> Purchase one today from our partners.</p>
+                            <PartnersBox>
+                                <a href="https://opensea.io">
+                                    <img src="/opensea_logo.png" alt="" height={190} width={190} />
+                                    <p>OpenSea</p>
+                                </a>
 
-                            <ul>
-                                <a href="https://opensea.io"><li>opensea</li> </a>
-                                <a href="https://rarible.com/"><li>rareabile</li> </a>
-                                <a href="https://zora.co/"><li>Zora </li> </a>
-                                <a href="https://looksrare.org/"><li>Looks Rare </li></a>
-                            </ul>
+                                <a href="https://looksrare.org">
+                                    <img src="/LooksRareLogo.jpeg" alt="" height={190} width={190} />
+                                    <p>Looks Rare</p>
+                                </a>
 
-                            <p> Or Disconnect Web3 wallet and connect to one with NFTs</p>
-                        </NoNFTSContainer>
-                    </>
-                }
+                                <a href="https://zora.co">
+                                    <img src="/Zora.jpeg" alt="" height={190} width={190} />
+                                    <p>Zora</p>
+                                </a>
+
+                                <a href="https://rarible.com">
+                                    <img src="/RaribleLogo.png" alt="" height={190} width={190} />
+                                    <p>Rarible</p>
+                                </a>
+                            </PartnersBox>
+                            <br /> <br />
+                            </NONFTImagesBox>
+                            </>}
+
+                            {!hasWallet && <>
+                                <NONFTImagesBox>
+                                    <h3> No Wallet Found. Download One of Our Partners Below</h3>
+
+
+                                </NONFTImagesBox>
+                            </>}
+
+                        <StakingMetaBoxNONFTS>
+
+                            <MetaBox>
+                                <br /> < br />
+                                <h3> Estaminted Earnings: </h3>
+
+                                <ul>
+                                    <li>N / A</li>
+                                </ul>
+
+                                {!stakeSelected && <>
+                                    <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
+                                </>}
+
+                                {stakeSelected && <>
+                                    <SelectedActionButton onClick={() => submit_stake()}
+                                        color={"#FDC8C7 "}> Stake </SelectedActionButton>
+                                </>}
+
+                            </MetaBox>
+
+                            <MetaBox>
+                                    <br /> <br />
+                                <h3> Current Earnings: </h3>
+
+                                <ul>
+                                    <li> N / A </li>
+                                </ul>
+
+                                <ActionButton onClick={() => submit_stake()} color={"#F4A7A7"}> Unstake </ActionButton>
+                            </MetaBox>
+
+                            <MetaBox>
+                                    <br /> <br />
+                                <h3> Amount To Claim:</h3>
+
+                                <ul>
+                                    <li> N / A </li>
+                                </ul>
+
+                                <ActionButton color={"#F4A7A7"}> Claim </ActionButton>
+                            </MetaBox>
+
+                        </StakingMetaBoxNONFTS>
+                    </>}
             </Container>
 
             <LOL>
@@ -682,3 +1030,13 @@ export function Account({ userAddress, web3 }: any) {
 }
 
 export default Account;
+
+//To Do - (Today / Tommorow)
+
+//Change Spinner Background-color
+//Add Loader Bar under spinner circle
+//Collections Display in Box
+//Check Users Wallets For NFTs
+//Update APP display on Desktop if the user Doesn't have NFTs
+
+//Lanuch Smart Contracts
