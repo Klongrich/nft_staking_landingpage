@@ -743,6 +743,7 @@ export function Account({ userAddress, web3, provider }: any) {
         if (!userAddress) {
             setHasWallet(false);
             setHashNFTs(false);
+            _zeroTotals();
         } else {
             getAlchemyDataChubbis(userAddress);
             //getAlchemyData();
@@ -962,7 +963,7 @@ export function Account({ userAddress, web3, provider }: any) {
                                         </a>
 
                                         <a href="https://www.coinbase.com/wallet">
-                                            <img src="/wallets/CoinbaseWalletLogo.jpeg" alt="" height={190} width={190} />
+                                            <img src="/wallets/CoinbaseWalletLogo.png" alt="" height={190} width={190} />
                                             <p>Coinbase Wallet</p>
                                         </a>
 
