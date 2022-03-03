@@ -386,15 +386,7 @@ const ProgressBarWrapper = styled.div`
     }
 `
 
-var ImageList = [{ metadata: {image: ""}, tokenID: "", collection: "", selected: false}];
-
-var SelectedNFTs = [
-    {
-        Collection : "holder",
-        tokenID : "0"
-    }
-];
-
+var SelectedNFTs = [{ Collection : "holder", tokenID : "0" }];
 var UserNFTs = [{ image: "", tokenID: "", collection: "", selected: false}];
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
@@ -628,38 +620,26 @@ export function Account({ userAddress, web3, provider }: any) {
                 const web3 = createAlchemyWeb3(
                     "https://eth-mainnet.alchemyapi.io/v2/UEzIhzfQD4trLHLg2IxfwwukrxfoYk-Q",
                 );
-
+                // const testAddress = "0x54BE3a794282C030b15E43aE2bB182E14c409C5e";
                 const userNFTs = await web3.alchemy.getNfts({ owner: userAddress, contractAddresses: ["0x42f1654b8eeb80c96471451b1106b63d0b1a9fe1"] });
-
                 if (userNFTs) {
                     if (userNFTs.ownedNfts.length <= 0) {
-                        setHashNFTs(false);
-                        _zeroTotals();
-                        return (0);
-                    }
-                    //@ts-ignore
-
-                    //Resetting ImageList
-                    ImageList = [{ metadata: { image: ""} , tokenID: "", collection: "", selected: false}];
-
-                    for (let i = 0; i < userNFTs.ownedNfts.length; i++) {
-                        //@ts-ignore
-                        let _URL = userNFTs.ownedNfts[i].metadata.image;
-                        //@ts-ignore
-                        let _tokenID = userNFTs.ownedNfts[i].id.tokenId;
-
-                        var temp = {
-                            metadata : { image: _URL} ,
-                            tokenID : _tokenID,
-                            collection : "0x42f1654B8eeB80C96471451B1106b63D0B1a9fe1",
-                            selected : false
+                        const allUserNFTs = await web3.alchemy.getNfts({owner: userAddress});
+                        if (allUserNFTs.ownedNfts.length > 0) {
+                            setUserNFTsTotal(allUserNFTs.ownedNfts.length);
+                            //@ts-ignore
+                            setAlchemeyData(allUserNFTs.ownedNfts);
+                            setHasLoaded(true);
+                            setHashNFTs(true);
+                            return (0);
+                        } else {
+                            setHashNFTs(false);
+                            _zeroTotals();
+                            return (0);
                         }
-
-                        ImageList.push(temp);
                     }
-                    console.log(ImageList);
                     //@ts-ignore
-                    setAlchemeyData(ImageList);
+                    setAlchemeyData(userNFTs.ownedNfts);
                     setUserChubbisTotal(userNFTs.ownedNfts.length);
                     console.log(userNFTs.ownedNfts);
                     setHasLoaded(true);
@@ -667,7 +647,6 @@ export function Account({ userAddress, web3, provider }: any) {
 
                     const userNFTcount = await web3.alchemy.getNfts({owner: userAddress});
                     setUserNFTsTotal(userNFTcount.ownedNfts.length);
-
                 } else {
                     console.log("NFTs not returend from Alchemey Call");
                     alert("No Alchemy Data");
@@ -761,7 +740,6 @@ export function Account({ userAddress, web3, provider }: any) {
     useEffect(() => {
         //getUserNFTs();
         //getAlchemyData();
-
         if (!userAddress) {
             setHasWallet(false);
             setHashNFTs(false);
@@ -774,6 +752,7 @@ export function Account({ userAddress, web3, provider }: any) {
                     setHasWallet(false);
                     setHashNFTs(false);
                 } else {
+                    setHasLoaded(false);
                     getAlchemyDataChubbis(accounts[0]);
                     //getAlchemyData();
                     setHasWallet(true);
@@ -792,7 +771,10 @@ export function Account({ userAddress, web3, provider }: any) {
                 <ul>
                     <li onClick={() => selectAllNFTs()}>Select All</li>
                     <li onClick={() => loadUserCollections()}>Collections ({userCollectionTotal}) </li>
-                    <li onClick={() => console.log("Update To Pull All UsersNFTs")}>NFTs ({userNFTsTotal})</li>
+
+                    {userNFTsTotal >= 100 && <li onClick={() => console.log("Update To Pull All UsersNFTs")}> NFTs ({userNFTsTotal}+) </li>}
+                    {userNFTsTotal < 100 && <li onClick={() => console.log("Update To Pull All UsersNFTs")}> NFTs ({userNFTsTotal})</li>}
+
                     <li onClick={() =>  getAlchemyDataChubbis(userAddress)}>Chubbis ({userChubbisTotal})</li>
                 </ul>
                 </FilterBar>
@@ -825,7 +807,7 @@ export function Account({ userAddress, web3, provider }: any) {
                                         {!data.selected && <>
                                         <PictureBox color={"black"}
                                                     onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, true)}>
-                                            <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={150} width={150} />
                                         </PictureBox>
                                         </>}
 
@@ -833,7 +815,7 @@ export function Account({ userAddress, web3, provider }: any) {
                                         {data.selected && <>
                                         <PictureBox color={"blue"}
                                                     onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, false)}>
-                                            <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={150} width={150} />
                                         </PictureBox>
                                         </>}
 
@@ -854,14 +836,14 @@ export function Account({ userAddress, web3, provider }: any) {
                                 {!data.selected && <>
                                     <PictureBox color={"black"}
                                                 onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, true)}>
-                                        <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
                                     </PictureBox>
                                 </>}
 
                                 {data.selected && <>
                                     <PictureBox color={"blue"}
                                                 onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, false)}>
-                                        <Image src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
                                     </PictureBox>
                                     </>}
                                     </>}
@@ -876,10 +858,11 @@ export function Account({ userAddress, web3, provider }: any) {
                             <SpinnerBox>
                                  <Image src={"/ColoredSpinner3.gif"} alt='' height={170} width={170} />
                                 <br />
-                                <ProgressBarWrapper>
+                                <p> Loading ... </p>
+                                {/* <ProgressBarWrapper>
                                     <ProgressBar bgcolor="#F4A7A7" progress={getLoadingIncerment(totalNFTs) * loadedNFTs} height={20} />
                                     <p> Loading all : {totalNFTs} / {loadedNFTs} </p>
-                                </ProgressBarWrapper>
+                                </ProgressBarWrapper> */}
                             </SpinnerBox>
                         </>}
 
@@ -939,7 +922,7 @@ export function Account({ userAddress, web3, provider }: any) {
                     <>
                         {hasWallet && <>
                         <NONFTImagesBox>
-                            <h3> This Account does not have any ChubbiFrens NFTs yet! </h3>
+                            <h3> This Account does not have any NFTs yet! </h3>
                             <h3> Purchase one today from our partners. </h3>
 
                             <PartnersBox>
@@ -963,6 +946,7 @@ export function Account({ userAddress, web3, provider }: any) {
                                     <p>Rarible</p>
                                 </a>
                             </PartnersBox>
+
                             <br /> <br />
                             </NONFTImagesBox>
                             </>}
@@ -971,6 +955,27 @@ export function Account({ userAddress, web3, provider }: any) {
                                 <NONFTImagesBox>
                                     <h3> No Wallet Found. Download One of Our Partners Below</h3>
 
+                                    <PartnersBox>
+                                        <a href="https://www.argent.xyz/">
+                                            <img src="/wallets/argentLogo.png" alt="" height={190} width={190} />
+                                            <p>Argent</p>
+                                        </a>
+
+                                        <a href="https://www.coinbase.com/wallet">
+                                            <img src="/wallets/CoinbaseWalletLogo.jpeg" alt="" height={190} width={190} />
+                                            <p>Coinbase Wallet</p>
+                                        </a>
+
+                                        <a href="https://metamask.io/">
+                                            <img src="/wallets/metamaskLogo.png" alt="" height={190} width={190} />
+                                            <p>Metamask</p>
+                                        </a>
+
+                                        <a href="https://rainbow.me/">
+                                            <img src="/wallets/rainbowLogo.png" alt="" height={190} width={190} />
+                                            <p>Rainbow</p>
+                                        </a>
+                                    </PartnersBox>
 
                                 </NONFTImagesBox>
                             </>}

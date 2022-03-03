@@ -11,7 +11,12 @@ const nextConfig = {
               'gateway.pinata.cloud',
               'lh3.googleusercontent.com',
               'anicats.mypinata.cloud',
-              'pxg-prod.herokuapp.com'],
+              'pxg-prod.herokuapp.com',
+              'nfts.superplastic.co',
+              'gateway.ipfs.io',
+              'lameloball.io',
+              'flutter-mainnet.s3.amazonaws.com',
+              'arcadetoads.mypinata.cloud'],
   }
 }
 
