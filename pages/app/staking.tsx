@@ -209,8 +209,6 @@ const CollectionBox = styled.div`
     overflow: hidden;
 `
 
-
-
 const SpinnerBox = styled.div`
     p {
         padding-top: 20px;
@@ -963,7 +961,7 @@ export function Account({ userAddress, web3, provider }: any) {
                                         </a>
 
                                         <a href="https://www.coinbase.com/wallet">
-                                            <img src="/wallets/CoinbaseWalletLogo.png" alt="" height={190} width={190} />
+                                            <img src="/wallets/coinbaseLogo.png" alt="" height={190} width={190} />
                                             <p>Coinbase Wallet</p>
                                         </a>
 
