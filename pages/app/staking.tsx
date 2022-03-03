@@ -939,7 +939,7 @@ export function Account({ userAddress, web3, provider }: any) {
                     <>
                         {hasWallet && <>
                         <NONFTImagesBox>
-                            <h3> This Account does not have any NFTs yet! </h3>
+                            <h3> This Account does not have any ChubbiFrens NFTs yet! </h3>
                             <h3> Purchase one today from our partners. </h3>
 
                             <PartnersBox>
