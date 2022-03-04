@@ -677,7 +677,6 @@ export function Account({ userAddress, web3, provider }: any) {
                     {userNFTsTotal >= 100 && <li onClick={() => console.log("Update To Pull All UsersNFTs")}> NFTs ({userNFTsTotal}+) </li>}
                     {userNFTsTotal < 100 && <li onClick={() => console.log("Update To Pull All UsersNFTs")}> NFTs ({userNFTsTotal})</li>}
 
-                    <li onClick={() =>  getAlchemyDataChubbis(userAddress)}>Chubbis ({userChubbisTotal})</li>
                 </ul>
                 </FilterBar>
 
