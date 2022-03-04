@@ -709,7 +709,7 @@ export function Account({ userAddress, web3, provider }: any) {
                                         {!data.selected && <>
                                         <PictureBox color={"black"}
                                                     onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, true)}>
-                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={150} width={150} />
+                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={110} width={110} />
                                         </PictureBox>
                                         </>}
 
@@ -717,7 +717,7 @@ export function Account({ userAddress, web3, provider }: any) {
                                         {data.selected && <>
                                         <PictureBox color={"blue"}
                                                     onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, false)}>
-                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={150} width={150} />
+                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={110} width={110} />
                                         </PictureBox>
                                         </>}
 
@@ -738,14 +738,14 @@ export function Account({ userAddress, web3, provider }: any) {
                                 {!data.selected && <>
                                     <PictureBox color={"black"}
                                                 onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, true)}>
-                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={110} width={110} />
                                     </PictureBox>
                                 </>}
 
                                 {data.selected && <>
                                     <PictureBox color={"blue"}
                                                 onClick={() => updateSelectedNFT(data.tokenID, data.collection, index, data.metadata.image, false)}>
-                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={110} width={110} />
                                     </PictureBox>
                                     </>}
                                     </>}
