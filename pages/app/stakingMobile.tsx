@@ -136,13 +136,13 @@ const NONFTImagesBox = styled.div`
 
     padding-top: 10px;
 
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 35px;
+    padding-right: 35px;
 
     h3 {
         padding-top: 0px;
         text-align: center;
-        font-size: 23px;
+        font-size: 25px;
     }
 `
 
