@@ -389,6 +389,12 @@ const ProgressBarWrapper = styled.div`
     }
 `
 
+const UserERC20BalanceBox = styled.div`
+    text-align: right;
+    padding-right: 245px;
+    margin-top: -40px;
+`
+
 var SelectedNFTs = [{ Collection : "holder", tokenID : "0" }];
 var UserNFTs = [{ image: "", tokenID: "", collection: "", selected: false}];
 
@@ -410,7 +416,7 @@ export function Account({ userAddress, web3, provider }: any) {
     const [userNFTs, setUserNFTs] = useState(UserNFTs);
     const [selectedNFTs, setSelectedNFTs] = useState(SelectedNFTs);
 
-    const [perDay, setPerDay] = useState(100);
+    const [perDay, setPerDay] = useState(0);
     const [claimAmount, setClaimAmount] = useState("");
 
     const [amountSelected, setAmountSelected] = useState(0);
@@ -444,6 +450,7 @@ export function Account({ userAddress, web3, provider }: any) {
     
     const [totalTestNftsMinted, setTotalTestNftsMinted] = useState(0);
     const [userNFTsStaked, setUserNFTsStaked] = useState(0);
+    const [userERC20Balance, setUserERC20Blanace] = useState(0);
 
     const [selectedTokenIDs, setSelectedTokenIDs] = useState([0,0]);
 
@@ -467,9 +474,9 @@ export function Account({ userAddress, web3, provider }: any) {
     //These are dev notes for people trying to read this I guess
     function updateEarningsPerDay(collection : any, tokenID : any, selected: any) {
         if (selected) {
-            setPerDay(perDay + 1);
+            setPerDay(perDay + 100);
         } else {
-            setPerDay(perDay - 1);
+            setPerDay(perDay - 100);
         }
     }
 
@@ -497,7 +504,6 @@ export function Account({ userAddress, web3, provider }: any) {
 
     async function updateSelectedNFT(tokenID : string, collection : string, index : number, image: string, selected: boolean) { 
         let updatedArray = [...AlchemeyData];
-       // let updatedTokenID = [...selectedTokenIDs]
 
        console.log("TokenID: " + tokenID);
         updatedArray[index] = {
@@ -507,13 +513,8 @@ export function Account({ userAddress, web3, provider }: any) {
             selected: selected
         };
 
-       // updatedTokenID[index] = parseInt(tokenID);
-
         updateEarningsPerDay(collection, tokenID, selected);
         setAlchemeyData(updatedArray);
-        // setSelectedTokenIDs(updatedTokenID);
-
-        // console.log(tokenID);
 
         if (!selected) {
             let tempCheck = amountSelected - 1;
@@ -851,6 +852,7 @@ export function Account({ userAddress, web3, provider }: any) {
             "https://eth-rinkeby.alchemyapi.io/v2/tY83BF3NHyUJl_TYPgWVfMspw4Ia7mA9",
         );
 
+        console.log(Ethaccounts);
         const userNFTs = await web3Alchemy.alchemy.getNfts({ owner: Ethaccounts[0], contractAddresses: [NftContractAddress] });
 
         console.log(userNFTs.ownedNfts);
@@ -989,6 +991,20 @@ export function Account({ userAddress, web3, provider }: any) {
         setHasLoaded(true);
     }
 
+    async function getUserERC20blanace() {
+        const Ethaccounts = await web3.eth.getAccounts();
+
+        const ERC20Contract = await new web3.eth.Contract(
+            StakingABI.abi,
+            StakingContractAddress
+        );
+
+        let userBalance = await ERC20Contract.methods.balanceOf(Ethaccounts[0]).call();
+
+        console.log("userBalance: " + userBalance / ONE_ETHER);
+        setUserERC20Blanace(userBalance / ONE_ETHER);
+    }
+
     useEffect(() => {
         //getUserNFTs();
         //getAlchemyData();
@@ -1000,6 +1016,7 @@ export function Account({ userAddress, web3, provider }: any) {
         } else {
             getAlchemyDataChubbis();
             getUserStakingMeta();
+            getUserERC20blanace();
             //getAlchemyData();
             setHasWallet(true);
             provider.on("accountsChanged", (accounts: string[]) => {
@@ -1009,9 +1026,10 @@ export function Account({ userAddress, web3, provider }: any) {
                 } else {
                     setHasLoaded(false);
                     getAlchemyDataChubbis();
+                    getUserStakingMeta();
+                    getUserERC20blanace();
                     //getAlchemyData();
                     setHasWallet(true);
-                    getUserStakingMeta();
                 }
         });
     }
@@ -1034,16 +1052,20 @@ export function Account({ userAddress, web3, provider }: any) {
                     {viewingTestNFTs && <li   onClick={() => LoadUserNFTs()}> <strong> Test NFTs ({testNftAmount}) </strong> </li>}
                     {!viewingTestNFTs && <li onClick={() => LoadUserNFTs()}> Test NFTs ({testNftAmount}) </li>}
 
-                    
                     {viewingStakedNFTs && <li onClick={() => LoadStakedNFTs([1,2])}> <strong> Staked NFTs ({userNFTsStaked}) </strong> </li>}
                     {!viewingStakedNFTs && <li onClick={() => LoadStakedNFTs([1,2])}> Staked NFTs ({userNFTsStaked})</li>}
-
 
                     {testNftAmount < 2 && userNFTsStaked < 2 && <>
                         <li onClick={() => mint_test_nft()}><strong> <u> Get Free NFT </u> </strong></li>
                     </>}
                 </ul>
                 </FilterBar>
+
+                {userERC20Balance > 0 && <>
+                    <UserERC20BalanceBox>
+                        <h3> Blanace: {userERC20Balance.toFixed(2)} NSC</h3>
+                    </UserERC20BalanceBox>
+                </>}
 
                 <PictureContainer>
                     {hasNFTs && <>
@@ -1137,11 +1159,21 @@ export function Account({ userAddress, web3, provider }: any) {
                             <MetaBox>
                                 <h3> Estaminted Earnings: </h3>
 
+                                {viewingStakedNFTs && <>
                                 <ul>
-                                    <li>${perDay} / Day</li>
-                                    <li>${(perDay * 7)} / Week</li>
-                                    <li>${(perDay * 30)} / Month </li>
+                                    <li>-{perDay} NSC / Day</li>
+                                    <li>-{(perDay * 7)} NSC / Week</li>
+                                    <li>-{(perDay * 30)} NSC / Month </li>
                                 </ul>
+                                </>}
+
+                                {!viewingStakedNFTs && <>
+                                <ul>
+                                    <li>+{perDay} NSC / Day</li>
+                                    <li>+{(perDay * 7)} NSC / Week</li>
+                                    <li>+{(perDay * 30)} NSC / Month </li>
+                                </ul>
+                                </>}
 
                                 {!stakeSelected && <>
                                     <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
@@ -1158,9 +1190,9 @@ export function Account({ userAddress, web3, provider }: any) {
                                 <h3> Current Earnings: </h3>
 
                                 <ul>
-                                    <li>$24.17 / Day</li>
-                                    <li>$170.12 / Week</li>
-                                    <li>650.12 / Month </li>
+                                    <li>{(100 * userNFTsStaked).toFixed(2)} NSC / Day</li>
+                                    <li>{(100 * userNFTsStaked * 7).toFixed(2)} NSC / Week</li>
+                                    <li>{(100 * userNFTsStaked * 30).toFixed(2)} NSC / Month </li>
                                 </ul>
 
                                 <ActionButton onClick={() => submit_unstake()} color={"#F4A7A7"}> Unstake </ActionButton>
@@ -1171,7 +1203,7 @@ export function Account({ userAddress, web3, provider }: any) {
 
                                 <ul>
                                     <li> ----------------------- </li>
-                                    <li> | | | Coins: {payOutAmount} | | | </li>
+                                    <li> | | | {payOutAmount} NSC | | | </li>
                                     <li> ----------------------- </li>
                                 </ul>
 
@@ -1302,13 +1334,16 @@ export function Account({ userAddress, web3, provider }: any) {
 
 export default Account;
 
-//To Do - (Today / Tommorow)
 
-//Change Spinner Background-color
-//Add Loader Bar under spinner circle
-//Collections Display in Box
-//Check Users Wallets For NFTs
-//Update APP display on Desktop if the user Doesn't have NFTs
+//To-Do Tommorow
 
-//Lanuch Smart Contracts
 //setApprovalForAll Screen
+//loadingScreen while waiting to stake
+//loadingScreen while waiting to unstake
+//loadingScreen while waiting to claim coins
+//page should be updated once loadingScreen is done
+
+//Display Blanace of staking tokens
+//Fix Estaminted Earnings to Coins per Time periods
+//Fix Current Earnings to Coins per Time periods
+//Fix Amount to Claim when user unstakes all their NFTs
