@@ -408,7 +408,7 @@ var testNFTs = [{image: "", attributes: [{}]}]
 //const StakingContractAddress = "0x2256D435F1b895D650F308D497A6701268e7D100"
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
-export function Account({ userAddress, web3, provider }: any) {
+export function Account({ userAddress, web3, provider, networkID }: any) {
 
     const [hasNFTs, setHashNFTs] = useState(true);
     const [hasLoaded, setHasLoaded] = useState(false);
@@ -1002,13 +1002,23 @@ export function Account({ userAddress, web3, provider }: any) {
         let userBalance = await ERC20Contract.methods.balanceOf(Ethaccounts[0]).call();
 
         console.log("userBalance: " + userBalance / ONE_ETHER);
+
         setUserERC20Blanace(userBalance / ONE_ETHER);
     }
 
+    //@ts-ignore
     useEffect(() => {
         //getUserNFTs();
         //getAlchemyData();
         //getUserStakingMeta();
+
+        if (web3.currentProvider.networkVersion != undefined) {
+            if (web3.currentProvider.networkVersion != "4") {
+                alert("Please Connect To Rinkeby Testnet")
+                return (0);
+            }
+        }
+
         if (!userAddress) {
             setHasWallet(false);
             setHashNFTs(false);

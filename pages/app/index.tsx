@@ -234,6 +234,7 @@ export function Dapp(): any {
     const [provider, setProvider] = useState(undefined);
     const [isMobile, setIsMobile] = useState(false);
     const [userAddress, setUserAddress] = useState('');
+    const [networkID, setNetworkID] = useState(0x1);
 
     const [state, setState] = useState("Collections");
 
@@ -250,8 +251,23 @@ export function Dapp(): any {
 
             setProvider(provider);
 
+
             provider.on("accountsChanged", (accounts: string[]) => {
                 setUserAddress(accounts[0]);
+            });
+
+            provider.on("connect", (info: { chainId: number }) => {
+                console.log(info);
+              });
+
+            provider.on("chainChanged", (chainId: number) => {
+                console.log(chainId);
+                setNetworkID(chainId);
+
+                if (chainId != 0x4) {
+                    console.log("not rinkbey");
+                    alert("You Have Switched Off the Rinkeby Network, Please reconnect to continue testing Development")
+                }
             });
 
             if (web3) {
