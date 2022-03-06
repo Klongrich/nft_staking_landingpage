@@ -1374,14 +1374,14 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                 <li> {mintTokenID} </li>
                                 <li> <a href={mintTokenURI}> {mintTokenURI} </a> </li>
                                 <li>{mintContractAddress}</li>
-                                <li> <a href={etherScanMintURL} target="_blank" > {mintTransactinHash} </a></li>
+                                <li> <a href={etherScanMintURL} rel="noreferrer" target="_blank" > {mintTransactinHash} </a></li>
                             </ol>
 
                             <br />
                                 <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                             <br />
 
-                            <h3> <a href={etherScanMintURL} target="_blank">View On Etherscan </a> </h3>
+                            <h3> <a href={etherScanMintURL} rel="noreferrer" target="_blank">View On Etherscan </a> </h3>
 
                         </MintingNFTBox>
                     </>}
@@ -1394,7 +1394,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
                             <img src={"https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/" + mintTokenID + ".png"} alt="" height={220} width={220} />
 
-                            <h3> <a href={"https://testnets.opensea.io/assets/0xeaed850e4b857f8d403dfd58758664391239b115/" + mintTokenID} target="_blank" > View on Opensea</a> </h3>
+                            <h3> <a href={"https://testnets.opensea.io/assets/0xeaed850e4b857f8d403dfd58758664391239b115/" + mintTokenID} target="_blank" rel="noreferrer" > View on Opensea</a> </h3>
                             <h4 onClick={() => setIsMinting(false)}> Close </h4>
                         </MintedNFTBox>
                     </>}
@@ -1408,7 +1408,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                         <h3> Stake Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
-                    <h4>Transaction Hash: <a href={etherScanStakeURL} target="_blank" > {stakeTransactionHash} </a></h4>
+                    <h4>Transaction Hash: <a href={etherScanStakeURL} target="_blank" rel="noreferrer" > {stakeTransactionHash} </a></h4>
                 </SubmitStakeLoadingBox>
             </>}
 
@@ -1420,7 +1420,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                         <h3> Unstake Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
-                    <h4>Transaction Hash: <a href={etherScanUnstakeURL} target="_blank" > {unstakeTransactionHash} </a></h4>
+                    <h4>Transaction Hash: <a href={etherScanUnstakeURL} target="_blank" rel="noreferrer" > {unstakeTransactionHash} </a></h4>
                 </SubmitStakeLoadingBox>
             </>}
 
@@ -1769,16 +1769,11 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
 export default Account;
 
-
 //To-Do Tommorow
-
-//setApprovalForAll Screen
-//loadingScreen while waiting to stake
-//loadingScreen while waiting to unstake
-//loadingScreen while waiting to claim coins
-//page should be updated once loadingScreen is done
 
 //Fix Amount to Claim when user unstakes all their NFTs
 
-//update Link to Etherscan on minted NFT
-//update Link to Open-sea on minted NFT
+//Detect if Mint is still loading for AlchemyAPI call
+//When user switches to Rinkbey, upate page and make minting the free / test NFT more clear
+
+
