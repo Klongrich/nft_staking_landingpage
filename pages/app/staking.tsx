@@ -395,6 +395,173 @@ const UserERC20BalanceBox = styled.div`
     margin-top: -40px;
 `
 
+const DialogBackground = styled.div`
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+    pointer-events: none;
+
+    background-color: black;
+
+    height: 1500px;
+    width: 2500px;
+`
+
+const MintingNFTBox = styled.div`
+    position: fixed;
+    z-index: 2;
+    color: black;
+    background-color: #CD8285;
+    text-align: center;
+
+    top: 290px;
+    left: 314px;
+
+    height: 375px;
+    width: 1180px;
+    padding-top: 10px;
+
+    border: 2px solid black;
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    display: inline-block;
+
+    h2 {
+        font-size: 32px;
+    }
+
+    ul {
+        list-style-type: none;
+        text-align: right;
+        font-weight: bold;
+
+        width: 180px;
+    }
+
+    ol {
+        list-style-type: none;
+        text-align: left;
+
+        margin-top: -153px;
+        margin-left: 190px;
+    }
+
+    li {
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        font-size: 22px;
+    }
+`
+
+const MintedNFTBox= styled.div`
+    position: fixed;
+    z-index: 2;
+    color: black;
+    background-color: #CD8285;
+    text-align: center;
+
+    top: 170px;
+    left: 664px;
+
+    height: 550px;
+    width: 450px;
+    padding-top: 10px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    display: inline-block;
+
+    h2 {
+        font-size: 32px;
+    }
+
+    h3 {
+        font-size: 26px;
+    }
+
+    img {
+        border: 1px solid black;
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.55);
+
+    }
+
+    ul {
+        list-style-type: none;
+        text-align: right;
+        font-weight: bold;
+
+        width: 180px;
+    }
+
+    ol {
+        list-style-type: none;
+        text-align: left;
+
+        margin-top: -115px;
+        margin-left: 200px;
+    }
+
+    li {
+        padding-top: 5px;
+        padding-bottom: 5px;
+
+        font-size: 20px;
+    }
+
+    h4 {
+        padding-top: 45px;
+        :hover {
+            cursor: pointer;x
+        }
+    }
+`
+
+const SetApprovalHeader = styled.div`
+    background-color: #F4A7A7;
+    z-index: 3;
+    position: fixed;
+
+    top: 190px;
+    left: 634px;
+
+    height: 30px;
+    width: 500px;
+`
+
+const SetApprovalBox = styled.div`
+    position: fixed;
+    z-index: 3;
+    color: black;
+    background-color: #CD8285;
+    text-align: center;
+
+    top: 220px;
+    left: 634px;
+
+    height: 500px;
+    width: 500px;
+
+    h2 {
+        padding-top: 55px;
+        padding-bottom: 0px;
+        font-size: 30px;
+    }
+
+    p {
+        padding-top: 70px;
+        padding-bottom: 70px;
+
+        font-size: 26px;
+    }
+`
+
+
+
 var SelectedNFTs = [{ Collection : "holder", tokenID : "0" }];
 var UserNFTs = [{ image: "", tokenID: "", collection: "", selected: false}];
 
@@ -447,7 +614,17 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
     const [viewingStakedNFTs, setViewingStakedNFTs] = useState(false);
     const [viewingTestNFTs, setViewingTestNFTs] = useState(false);
     const [viewingNFTs, setViewingNFTs] = useState(true);
-    
+
+    const [isMinting, setIsMinting] = useState(false);
+    const [finishedMint, setFinishedMint] = useState(true);
+    const [isApproving, setIsAprroving] = useState(false);
+    const [approveLoading, setApprovedLoading] = useState(false);
+    const [finishedAprroving, setFinishedApproving] = useState(false);
+    const [mintTokenID, setMintTokenID] = useState(0);
+    const [mintTokenURI, setMintTokenURI] = useState("");
+    const [mintContractAddress, setMintContractAddress] = useState("");
+    const [stakingContractApproved, setStakingContractApproved] = useState(false);
+
     const [totalTestNftsMinted, setTotalTestNftsMinted] = useState(0);
     const [userNFTsStaked, setUserNFTsStaked] = useState(0);
     const [userERC20Balance, setUserERC20Blanace] = useState(0);
@@ -528,6 +705,29 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         }
     }
 
+    async function setApprovalForAll() {
+        const Ethaccounts = await web3.eth.getAccounts();
+
+        const nftContract = new web3.eth.Contract(
+            NftABI.abi,
+            NftContractAddress
+        );
+
+        let isApproved;
+
+        isApproved = await nftContract.methods.isApprovedForAll(Ethaccounts[0], StakingContractAddress).call();
+
+        if (!isApproved) {
+            console.log("Starting setAprrovalForAll request");
+            setApprovedLoading(true);
+            let ApproveResponse = await nftContract.methods.setApprovalForAll(StakingContractAddress, true).send({from: Ethaccounts[0]})
+            setFinishedApproving(true);
+            setStakingContractApproved(true);
+            console.log("setApproval Request recived");
+            console.log(ApproveResponse);
+            return (0);
+        }
+    }
 
     async function submit_stake() {
         const Ethaccounts = await web3.eth.getAccounts();
@@ -563,11 +763,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         isApproved = await nftContract.methods.isApprovedForAll(Ethaccounts[0], StakingContractAddress).call();
 
         if (!isApproved) {
-            console.log("Starting setAprrovalForAll request");
-            let ApproveResponse = await nftContract.methods.setApprovalForAll(StakingContractAddress, true).send({from: Ethaccounts[0]})
-            console.log("setApproval Request recived");
-
-            console.log(ApproveResponse);
+            alert("Staking Contract is not Approved By User")
             return (0);
         }
 
@@ -764,8 +960,10 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
         let amountMinted = await nftContract.methods.mintAmount(Ethaccounts[0]).call();
         let totalAmountMinted = await nftContract.methods.mintCount().call();
+        let isApproved = await nftContract.methods.isApprovedForAll(Ethaccounts[0], StakingContractAddress).call();
 
         setTotalTestNftsMinted(totalAmountMinted);
+        setStakingContractApproved(isApproved);
 
         if (amountMinted >= 2) {
             console.log("Max Amount Minted");
@@ -837,8 +1035,15 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         console.log("TokenID: " + _tokenID);
         console.log("TokenURI: " + _tokenURI);
 
+        setMintContractAddress(NftContractAddress);
+        setMintTokenID(_tokenID);
+        setMintTokenURI(_tokenURI);
+
+        setIsMinting(true);
+        setFinishedMint(false);
         //Have Loading Window For When Token is Minting;
         let res = await nftContract.methods.mint(Ethaccounts[0], _tokenID, _tokenURI).send({from: Ethaccounts[0]});
+        setFinishedMint(true);
         console.log("Minting Ended");
 
         //Update Page to show NFT is there;
@@ -1059,6 +1264,71 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
     return (
         <>
+            {isApproving && <>
+                <DialogBackground />
+                {!finishedAprroving && <>
+                    <SetApprovalHeader />
+                    <SetApprovalBox>
+                        <h2> Please Approve Staking Contract</h2>
+                        {!approveLoading && <>
+                            <p> Status: Unapproved </p>
+                            <ActionButton color="#F4A7A7" onClick={() => setApprovalForAll()}> Approve </ActionButton>
+                        </>}
+                        {approveLoading && <>
+                            <p>  Status: ....... Loading ... please wait </p>
+                            <ActionButton color="#F4A7A7"> .............. </ActionButton>
+                        </>}
+                    </SetApprovalBox>
+                </>}
+
+                {finishedAprroving && <>
+                    <SetApprovalBox>
+                        <h2> Staking Contract Approved!</h2>
+                        <p> Status: Approved! </p>
+
+                        <ActionButton color="#F4A7A7" onClick={() => setIsAprroving(false)}> Stake NFTs </ActionButton>
+                    </SetApprovalBox>
+                </>}
+
+            </>}
+
+            {isMinting && <>
+                <DialogBackground />
+                    {!finishedMint && <>
+                        <MintingNFTBox>
+                            <h2> Minting Free NFT ..... </h2>
+
+                            <ul>
+                                <li>TokenID: </li>
+                                <li>TokenURI: </li>
+                                <li>Contract Address: </li>
+                            </ul>
+                            <ol>
+                                <li> {mintTokenID} </li>
+                                <li> <a href={mintTokenURI}> {mintTokenURI} </a> </li>
+                                <li>{mintContractAddress}</li>
+                            </ol>
+
+                            <br />
+                                <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
+                            <br />
+
+                        </MintingNFTBox>
+                    </>}
+
+                    {finishedMint && <>
+                        <MintedNFTBox>
+                            <h2> Free NFT Minted!</h2>
+
+                            <h3> Azuki #15 </h3>
+
+                            <img src={"https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/" + mintTokenID + ".png"} alt="" height={220} width={220} />
+
+                            <h3> <a href=""> View on Etherscan </a> </h3>
+                            <h4 onClick={() => setIsMinting(false)}> Close </h4>
+                        </MintedNFTBox>
+                    </>}
+            </>}
             <Header />
             <Container>
                 <h2> User NFTs </h2>
@@ -1182,30 +1452,50 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                 <h3> Estaminted Earnings: </h3>
 
                                 {viewingStakedNFTs && <>
-                                <ul>
-                                    <li>-{perDay} NSC / Day</li>
-                                    <li>-{(perDay * 7)} NSC / Week</li>
-                                    <li>-{(perDay * 30)} NSC / Month </li>
-                                </ul>
+                                    <ul>
+                                        <li>-{perDay} NSC / Day</li>
+                                        <li>-{(perDay * 7)} NSC / Week</li>
+                                        <li>-{(perDay * 30)} NSC / Month </li>
+                                    </ul>
 
-                                <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
+                                    {stakingContractApproved && <>
+                                        <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
+                                    </>}
+
+                                    {!stakingContractApproved && <>
+                                        <ActionButton onClick={() => setIsAprroving(true)} color={"#F4A7A7"}> Approve</ActionButton>
+                                    </>}
                                 </>}
+
 
                                 {!viewingStakedNFTs && <>
-                                <ul>
-                                    <li>+{perDay} NSC / Day</li>
-                                    <li>+{(perDay * 7)} NSC / Week</li>
-                                    <li>+{(perDay * 30)} NSC / Month </li>
-                                </ul>
+                                    <ul>
+                                        <li>+{perDay} NSC / Day</li>
+                                        <li>+{(perDay * 7)} NSC / Week</li>
+                                        <li>+{(perDay * 30)} NSC / Month </li>
+                                    </ul>
 
-                                {!stakeSelected && <>
-                                    <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
-                                </>}
+                                    {!stakingContractApproved && <>
+                                        {!stakeSelected && <>
+                                            <ActionButton onClick={() => setIsAprroving(true)} color={"#F4A7A7"}> Approve </ActionButton>
+                                        </>}
 
-                                {stakeSelected && <>
-                                    <SelectedActionButton onClick={() => submit_stake()}
-                                        color={"#FDC8C7 "}> Stake </SelectedActionButton>
-                                </>}
+                                        {stakeSelected && <>
+                                            <SelectedActionButton onClick={() => setIsAprroving(true)}
+                                                color={"#FDC8C7 "}> Approve </SelectedActionButton>
+                                        </>}
+                                    </>}
+
+                                    {stakingContractApproved && <>
+                                        {!stakeSelected && <>
+                                            <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
+                                        </>}
+
+                                        {stakeSelected && <>
+                                            <SelectedActionButton onClick={() => submit_stake()}
+                                                color={"#FDC8C7 "}> Stake </SelectedActionButton>
+                                        </>}
+                                    </>}
                                 </>}
                             </MetaBox>
 
