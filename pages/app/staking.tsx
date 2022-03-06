@@ -1287,25 +1287,22 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         //getUserNFTs();
         //getAlchemyData();
         //getUserStakingMeta();
-
-        if (web3.currentProvider.networkVersion != undefined) {
-
-            if (web3.currentProvider.networkVersion === "1") {
-                alert("We have Detected Your on mainnet please switch to rinkeby for testing developement");
-            };
-
-            if (web3.currentProvider.networkVersion != "4") {
-                alert("Please Connect To Rinkeby Testnet")
-                return (0);
-            }
-        }
-
-
         if (!userAddress) {
             setHasWallet(false);
             setHashNFTs(false);
             _zeroTotals();
         } else {
+
+            if (web3.currentProvider.networkVersion != undefined) {
+                if (web3.currentProvider.networkVersion === "1") {
+                    alert("We have Detected Your on mainnet please switch to rinkeby for testing developement");
+                };
+                if (web3.currentProvider.networkVersion != "4") {
+                    alert("Please Connect To Rinkeby Testnet")
+                    return (0);
+                }
+            }
+
             getAlchemyDataChubbis();
             getUserStakingMeta();
             getUserERC20blanace();
@@ -1432,7 +1429,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                         <h3> Claim Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
-                    <h4>Transaction Hash: <a href={etherScanClaimURL} target="_blank" > {claimTransactionHash} </a></h4>
+                    <h4>Transaction Hash: <a href={etherScanClaimURL} target="_blank" rel="noreferrer" > {claimTransactionHash} </a></h4>
                 </SubmitStakeLoadingBox>
             </>}
 
