@@ -567,17 +567,18 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
             let ApproveResponse = await nftContract.methods.setApprovalForAll(StakingContractAddress, true).send({from: Ethaccounts[0]})
             console.log("setApproval Request recived");
 
-            let StakeRespone = await StakingContract.methods.stake_nfts([3,4]).send({ from: Ethaccounts [0]});
-
             console.log(ApproveResponse);
-            console.log(StakeRespone);
             return (0);
         }
 
         if (isApproved) {
             console.log(selectedTokenIDs);
 
-            await StakingContract.methods.stake_nfts(selectedTokenIDs).send({ from: Ethaccounts[0] });
+            let _selectedTokenIDs = selectedTokenIDs.filter((a) => a);
+
+            console.log("Starting To Stake NFTs");
+            await StakingContract.methods.stake_nfts(_selectedTokenIDs).send({ from: Ethaccounts[0] });
+            console.log("User NFTs are now Staked;")
         }
     }
 
@@ -589,7 +590,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
             StakingContractAddress
         );
 
-        let selectedTokenIDs = [0];
+        let selectedTokenIDs = [];
 
         //Bug When selecting NFTs to stake
         for (let x = 0; x < AlchemeyData.length; x++) {
@@ -597,7 +598,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
             if (AlchemeyData[x].selected != undefined ) {
                 if(AlchemeyData[x].selected != false) {
-                    let tokenID = parseInt(AlchemeyData[x].id.tokenId, 16);
+                    let tokenID = parseInt(AlchemeyData[x].id.tokenId, 10);
                     selectedTokenIDs[x] = tokenID;
 
                     console.log(tokenID);
@@ -608,8 +609,13 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         selectedTokenIDs.shift();
         console.log(selectedTokenIDs);
 
+        let _selectedTokenIDs = selectedTokenIDs.filter((a) => a);
+
+        console.log(_selectedTokenIDs);
+        console.log("hello")
+
         console.log("Unstaking Started");
-        let res = await StakingContract.methods.unstake_nfts(Ethaccounts[0], selectedTokenIDs).send({ from: Ethaccounts[0] });
+        let res = await StakingContract.methods.unstake_nfts(Ethaccounts[0], _selectedTokenIDs).send({ from: Ethaccounts[0] });
         console.log("Unstaking Completed");
 
         console.log(res);
@@ -1013,11 +1019,17 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         //getUserStakingMeta();
 
         if (web3.currentProvider.networkVersion != undefined) {
+
+            if (web3.currentProvider.networkVersion === "1") {
+                alert("We have Detected Your on mainnet please switch to rinkeby for testing developement");
+            };
+
             if (web3.currentProvider.networkVersion != "4") {
                 alert("Please Connect To Rinkeby Testnet")
                 return (0);
             }
         }
+
 
         if (!userAddress) {
             setHasWallet(false);
@@ -1104,7 +1116,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
                                         {!data.selected && <>
                                         <PictureBox color={"black"}
-                                                    onClick={() => updateSelectedNFT(parseInt(data.id.tokenId, 16).toString(), data.collection, index, data.metadata.image, true)}>
+                                                    onClick={() => updateSelectedNFT(data.id.tokenId, data.collection, index, data.metadata.image, true)}>
                                             <img src={checkIPFShash(data.metadata.image)} alt='' height={150} width={150} />
                                         </PictureBox>
                                         </>}
@@ -1112,7 +1124,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
                                         {data.selected && <>
                                         <PictureBox color={"blue"}
-                                                    onClick={() => updateSelectedNFT(parseInt(data.id.tokenId, 16).toString(), data.collection, index, data.metadata.image, false)}>
+                                                    onClick={() => updateSelectedNFT(data.id.tokenId, data.collection, index, data.metadata.image, false)}>
                                             <img src={checkIPFShash(data.metadata.image)} alt='' height={150} width={150} />
                                         </PictureBox>
                                         </>}
@@ -1133,14 +1145,14 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
                                 {!data.selected && <>
                                     <PictureBox color={"black"}
-                                                onClick={() => updateSelectedNFT(parseInt(data.id.tokenId, 16).toString(), data.collection, index, data.metadata.image, true)}>
+                                                onClick={() => updateSelectedNFT(data.id.tokenId, data.collection, index, data.metadata.image, true)}>
                                         <img src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
                                     </PictureBox>
                                 </>}
 
                                 {data.selected && <>
                                     <PictureBox color={"blue"}
-                                                onClick={() => updateSelectedNFT(parseInt(data.id.tokenId, 16).toString(), data.collection, index, data.metadata.image, false)}>
+                                                onClick={() => updateSelectedNFT(data.id.tokenId, data.collection, index, data.metadata.image, false)}>
                                         <img src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
                                     </PictureBox>
                                     </>}
@@ -1175,6 +1187,8 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                     <li>-{(perDay * 7)} NSC / Week</li>
                                     <li>-{(perDay * 30)} NSC / Month </li>
                                 </ul>
+
+                                <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
                                 </>}
 
                                 {!viewingStakedNFTs && <>
@@ -1183,7 +1197,6 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                     <li>+{(perDay * 7)} NSC / Week</li>
                                     <li>+{(perDay * 30)} NSC / Month </li>
                                 </ul>
-                                </>}
 
                                 {!stakeSelected && <>
                                     <ActionButton color={"#F4A7A7"}> Stake </ActionButton>
@@ -1193,7 +1206,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                     <SelectedActionButton onClick={() => submit_stake()}
                                         color={"#FDC8C7 "}> Stake </SelectedActionButton>
                                 </>}
-
+                                </>}
                             </MetaBox>
 
                             <MetaBox>
@@ -1205,7 +1218,21 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                     <li>{(100 * userNFTsStaked * 30).toFixed(2)} NSC / Month </li>
                                 </ul>
 
-                                <ActionButton onClick={() => submit_unstake()} color={"#F4A7A7"}> Unstake </ActionButton>
+                                {viewingStakedNFTs && <>
+                                    {!stakeSelected && <>
+                                        <ActionButton color={"#F4A7A7"}> Unstake </ActionButton>
+                                    </>}
+
+                                    {stakeSelected && <>
+                                        <SelectedActionButton onClick={() => submit_unstake()}
+                                            color={"#FDC8C7 "}> Unstake </SelectedActionButton>
+                                    </>}
+                                </>}
+
+                                {!viewingStakedNFTs && <>
+                                    <ActionButton color={"#F4A7A7"}> Unstake </ActionButton>
+                                </>}
+
                             </MetaBox>
 
                             <MetaBox>
