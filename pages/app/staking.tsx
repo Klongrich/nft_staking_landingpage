@@ -772,8 +772,16 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
             let _selectedTokenIDs = selectedTokenIDs.filter((a) => a);
 
+            console.log(_selectedTokenIDs.length);
+
             console.log("Starting To Stake NFTs");
             await StakingContract.methods.stake_nfts(_selectedTokenIDs).send({ from: Ethaccounts[0] });
+
+            setStakeSelected(false);
+
+            await LoadUserNFTs();
+            await getUserStakingMeta();
+
             console.log("User NFTs are now Staked;")
         }
     }
@@ -812,8 +820,13 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
         console.log("Unstaking Started");
         let res = await StakingContract.methods.unstake_nfts(Ethaccounts[0], _selectedTokenIDs).send({ from: Ethaccounts[0] });
-        console.log("Unstaking Completed");
 
+        setStakeSelected(false);
+
+        await LoadStakedNFTs([2,3]);
+        await getUserStakingMeta();
+
+        console.log("Unstaking Completed");
         console.log(res);
     }
 
@@ -827,6 +840,9 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
         console.log("Claim Coins Started");
         let res = await StakingContract.methods.claim_coins(Ethaccounts[0]).send({from: Ethaccounts[0]});
+
+        setPayOutAmount(0);
+        getUserERC20blanace();
         console.log("CLaim Coins Ended");
 
         console.log(res);
@@ -1049,6 +1065,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         //Update Page to show NFT is there;
         let updatedNFTamount = testNftAmount + 1;
         setTestNftAmount(updatedNFTamount);
+        await LoadUserNFTs();
 
         console.log(res);
 
@@ -1078,6 +1095,11 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
             setViewingNFTs(false);
         }
 
+        setPerDay(0);
+        setStakeSelected(false);
+
+        await getUserStakingMeta();
+
         setViewingTestNFTs(true);
         setHasLoaded(true);
     }
@@ -1103,7 +1125,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
         for (let x = 0; x < AmountStaked; x++) {
             let _tokenID = await StakingContract.methods.getTokenID(Ethaccounts[0], x).call();
-  
+
             console.log("token id: " + _tokenID);
 
             console.log("fetching metadata for a crypto coven NFT...");
@@ -1136,71 +1158,17 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
             setViewingNFTs(false);
         }
 
+        setPerDay(0);
+        setStakeSelected(false);
+
+        await getUserStakingMeta();
+
         setViewingStakedNFTs(true);
         setHasLoaded(true);
  
         console.log("-----------------")
     }
 
-    async function loadUserTestNfts() {
-
-        setHashNFTs(true);
-        setHasLoaded(false);
-        const Ethaccounts = await web3.eth.getAccounts();
-
-        const nftContract = new web3.eth.Contract(
-            NftABI.abi,
-            "0xeaEd850e4b857f8D403Dfd58758664391239B115"
-        );
-
-        let NftMeta = [{metadata: {image: ""}}];
-
-        console.log("total minted: " + totalTestNftsMinted);
-        for (let x = 0; x < totalTestNftsMinted - 1; x++) {
-
-            let Owner = await nftContract.methods.ownerOf(x).call();
-            console.log("Owner: " + Owner);
-
-            if (Owner = Ethaccounts[0]) {
-                let tokenURI = await nftContract.methods.tokenURI(x).call();
-
-                console.log(tokenURI);
-                //ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1
-
-                let _ipfsHash = tokenURI.substring(7, 56);
-                let _URL = "https://ipfs.io/ipfs/" + _ipfsHash;
-                let _tokenID = x;
-
-                console.log("_ipfsHash: " + _ipfsHash);
-                console.log("_URL: " + _URL);
-
-                fetch(_URL)
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log(data);
-                        console.log(data.image);
-
-                        let ImageHash = data.image.substring(7,56);
-                        let _ImageURL = "https://ipfs.io/ipfs/" + ImageHash;
-
-                        let _temp = {
-                            metadata: {image: _ImageURL},
-                            tokenID: _tokenID,
-                            collection: "Mock Azuki Test NFT",
-                            selected: false
-                        }
-
-                        console.log(_temp);
-                        NftMeta.push(_temp);
-                    })
-            }
-        }
-
-        console.log(NftMeta);
-        //@ts-ignore
-        setAlchemeyData(NftMeta);
-        setHasLoaded(true);
-    }
 
     async function getUserERC20blanace() {
         const Ethaccounts = await web3.eth.getAccounts();
@@ -1320,7 +1288,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                         <MintedNFTBox>
                             <h2> Free NFT Minted!</h2>
 
-                            <h3> Azuki #15 </h3>
+                            <h3> Azuki #{mintTokenID} </h3>
 
                             <img src={"https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/" + mintTokenID + ".png"} alt="" height={220} width={220} />
 
@@ -1347,7 +1315,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                     {viewingStakedNFTs && <li onClick={() => LoadStakedNFTs([1,2])}> <strong> Staked NFTs ({userNFTsStaked}) </strong> </li>}
                     {!viewingStakedNFTs && <li onClick={() => LoadStakedNFTs([1,2])}> Staked NFTs ({userNFTsStaked})</li>}
 
-                    {testNftAmount < 2 && userNFTsStaked < 2 && <>
+                    {testNftAmount < 2 && userNFTsStaked < 2 && (testNftAmount + userNFTsStaked < 2) && <>
                         <li onClick={() => mint_test_nft()}><strong> <u> Get Free NFT </u> </strong></li>
                     </>}
                 </ul>
