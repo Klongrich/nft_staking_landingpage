@@ -419,7 +419,7 @@ const MintingNFTBox = styled.div`
     top: 290px;
     left: 314px;
 
-    height: 375px;
+    height: 482px;
     width: 1180px;
     padding-top: 10px;
 
@@ -445,7 +445,7 @@ const MintingNFTBox = styled.div`
         list-style-type: none;
         text-align: left;
 
-        margin-top: -153px;
+        margin-top: -201px;
         margin-left: 190px;
     }
 
@@ -560,6 +560,43 @@ const SetApprovalBox = styled.div`
     }
 `
 
+const SubmitStakeLoadingBox = styled.div`
+position: fixed;
+z-index: 3;
+color: black;
+background-color: #CDA3A6;
+text-align: center;
+
+top: 217px;
+left: 312px;
+
+height: 420px;
+width: 100%:
+
+`
+
+const SubmitStakeInnerLoadingBox = styled.div`
+color: black;
+background-color: #CD8285;
+text-align: center;
+
+padding-top: 20px;
+margin-top: 30px;
+margin-left: 100px;
+margin-right: 100px;
+
+height: 300px;
+width: 900px;
+
+border: 1px solid black;
+border-radius: 20px;
+
+h3 {
+    padding-bottom: 38px;
+}
+
+`
+
 
 
 var SelectedNFTs = [{ Collection : "holder", tokenID : "0" }];
@@ -619,6 +656,11 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
     const [finishedMint, setFinishedMint] = useState(true);
     const [isApproving, setIsAprroving] = useState(false);
     const [approveLoading, setApprovedLoading] = useState(false);
+
+    const [isStaking, setIsStaking] = useState(false);
+    const [isUnstaking, setIsUnstaking] = useState(false);
+    const [isClaiming, setIsClaiming] = useState(false);
+
     const [finishedAprroving, setFinishedApproving] = useState(false);
     const [mintTokenID, setMintTokenID] = useState(0);
     const [mintTokenURI, setMintTokenURI] = useState("");
@@ -634,6 +676,16 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
     const [chubbisLoading, setChubbisLoading] = useState(false);
     const [totalChubbis, setTotalChubbis] = useState(0);
     const [loadedChubbis, setLoadedChubbis] = useState(0);
+
+    const [etherScanStakeURL, setEtherScanStakeURL] = useState("");
+    const [etherScanUnstakeURL, setEtherScanUnstakeURL] = useState("");
+    const [etherScanClaimURL, setEtherScanCliamURL] = useState("");
+    const [etherScanMintURL, setEtherScanMintURL] = useState("");
+
+    const [mintTransactinHash, setMintTransactionHash] = useState("");
+    const [stakeTransactionHash, setStakeTransactionHash] = useState("");
+    const [unstakeTransactionHash, setUnstakeTransactionHash] = useState("");
+    const [claimTransactionHash, setClaimTransactinHash] = useState("");
 
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
@@ -773,14 +825,25 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
             let _selectedTokenIDs = selectedTokenIDs.filter((a) => a);
 
             console.log(_selectedTokenIDs.length);
-
             console.log("Starting To Stake NFTs");
-            await StakingContract.methods.stake_nfts(_selectedTokenIDs).send({ from: Ethaccounts[0] });
+
+            setIsStaking(true);
+
+            let _baseURL = "https://rinkeby.etherscan.io/tx/";
+
+            await StakingContract.methods.stake_nfts(_selectedTokenIDs).send({ from: Ethaccounts[0] })
+                .on('transactionHash', function(hash : any) {
+                    console.log("transaction hash: " + hash);
+                    setStakeTransactionHash(hash);
+                    setEtherScanStakeURL(_baseURL + hash);
+                });
 
             setStakeSelected(false);
 
             await LoadUserNFTs();
             await getUserStakingMeta();
+
+            setIsStaking(false);
 
             console.log("User NFTs are now Staked;")
         }
@@ -805,7 +868,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                     let tokenID = parseInt(AlchemeyData[x].id.tokenId, 10);
                     selectedTokenIDs[x] = tokenID;
 
-                    console.log(tokenID);
+                    console.log("Selected: ID" + tokenID);
                 }
             }
         }
@@ -816,15 +879,30 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         let _selectedTokenIDs = selectedTokenIDs.filter((a) => a);
 
         console.log(_selectedTokenIDs);
-        console.log("hello")
 
         console.log("Unstaking Started");
-        let res = await StakingContract.methods.unstake_nfts(Ethaccounts[0], _selectedTokenIDs).send({ from: Ethaccounts[0] });
+        setIsUnstaking(true);
+
+        console.log(_selectedTokenIDs);
+
+        let _baseURL = "https://rinkeby.etherscan.io/tx/";
+
+        let res = await StakingContract.methods.unstake_nfts(Ethaccounts[0], _selectedTokenIDs).send({ from: Ethaccounts[0] })
+            .on('transactionHash', function(hash : any) {
+                console.log("transaction hash: " + hash);
+                setUnstakeTransactionHash(hash);
+                setEtherScanUnstakeURL(_baseURL + hash);
+            })
+            .on('error', function(error: any) {
+                console.log(error);
+            });
 
         setStakeSelected(false);
 
         await LoadStakedNFTs([2,3]);
         await getUserStakingMeta();
+
+        setIsUnstaking(false);
 
         console.log("Unstaking Completed");
         console.log(res);
@@ -839,12 +917,22 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         );
 
         console.log("Claim Coins Started");
-        let res = await StakingContract.methods.claim_coins(Ethaccounts[0]).send({from: Ethaccounts[0]});
+        setIsClaiming(true);
+
+        let _baseURL = "https://rinkeby.etherscan.io/tx/";
+
+        let res = await StakingContract.methods.claim_coins(Ethaccounts[0]).send({from: Ethaccounts[0]})
+            .on('transactionHash', function(hash : any) {
+                console.log("transaction hash: " + hash);
+                setClaimTransactinHash(hash);
+                setEtherScanCliamURL(_baseURL + hash);
+            });
 
         setPayOutAmount(0);
         getUserERC20blanace();
-        console.log("CLaim Coins Ended");
 
+        setIsClaiming(false);
+        console.log("CLaim Coins Ended");
         console.log(res);
     }
 
@@ -1058,7 +1146,16 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
         setIsMinting(true);
         setFinishedMint(false);
         //Have Loading Window For When Token is Minting;
-        let res = await nftContract.methods.mint(Ethaccounts[0], _tokenID, _tokenURI).send({from: Ethaccounts[0]});
+
+        let _baseURL = "https://rinkeby.etherscan.io/tx/";
+
+        let res = await nftContract.methods.mint(Ethaccounts[0], _tokenID, _tokenURI).send({from: Ethaccounts[0]})
+            .on('transactionHash', function(hash : any) {
+                console.log("transaction hash: " + hash);
+                setMintTransactionHash(hash);
+                setEtherScanMintURL(_baseURL + hash);
+            });
+
         setFinishedMint(true);
         console.log("Minting Ended");
 
@@ -1243,6 +1340,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                             <ActionButton color="#F4A7A7" onClick={() => setApprovalForAll()}> Approve </ActionButton>
                         </>}
                         {approveLoading && <>
+                            <Image src={"/ColoredSpinner3.gif"} alt='' height={170} width={170} />
                             <p>  Status: ....... Loading ... please wait </p>
                             <ActionButton color="#F4A7A7"> .............. </ActionButton>
                         </>}
@@ -1270,16 +1368,20 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                 <li>TokenID: </li>
                                 <li>TokenURI: </li>
                                 <li>Contract Address: </li>
+                                <li>Transaction Hash:</li>
                             </ul>
                             <ol>
                                 <li> {mintTokenID} </li>
                                 <li> <a href={mintTokenURI}> {mintTokenURI} </a> </li>
                                 <li>{mintContractAddress}</li>
+                                <li> <a href={etherScanMintURL} target="_blank" > {mintTransactinHash} </a></li>
                             </ol>
 
                             <br />
                                 <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                             <br />
+
+                            <h3> <a href={etherScanMintURL} target="_blank">View On Etherscan </a> </h3>
 
                         </MintingNFTBox>
                     </>}
@@ -1292,11 +1394,49 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
                             <img src={"https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/" + mintTokenID + ".png"} alt="" height={220} width={220} />
 
-                            <h3> <a href=""> View on Etherscan </a> </h3>
+                            <h3> <a href={"https://testnets.opensea.io/assets/0xeaed850e4b857f8d403dfd58758664391239b115/" + mintTokenID} target="_blank" > View on Opensea</a> </h3>
                             <h4 onClick={() => setIsMinting(false)}> Close </h4>
                         </MintedNFTBox>
                     </>}
             </>}
+
+            {isStaking && <>
+                <DialogBackground />
+                <SubmitStakeLoadingBox>
+                    <SubmitStakeInnerLoadingBox>
+                        <h2>Stake Submitted To Ethereum Block-chain</h2>
+                        <h3> Stake Loading .... Please Wait .... </h3>
+                        <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
+                    </SubmitStakeInnerLoadingBox>
+                    <h4>Transaction Hash: <a href={etherScanStakeURL} target="_blank" > {stakeTransactionHash} </a></h4>
+                </SubmitStakeLoadingBox>
+            </>}
+
+            {isUnstaking && <>
+                <DialogBackground />
+                <SubmitStakeLoadingBox>
+                    <SubmitStakeInnerLoadingBox>
+                        <h2>Unstake Submitted To Ethereum Block-chain</h2>
+                        <h3> Unstake Loading .... Please Wait .... </h3>
+                        <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
+                    </SubmitStakeInnerLoadingBox>
+                    <h4>Transaction Hash: <a href={etherScanUnstakeURL} target="_blank" > {unstakeTransactionHash} </a></h4>
+                </SubmitStakeLoadingBox>
+            </>}
+
+            {isClaiming && <>
+                <DialogBackground />
+                <SubmitStakeLoadingBox>
+                    <SubmitStakeInnerLoadingBox>
+                        <h2> Claim Submitted To Ethereum Block-chain</h2>
+                        <h3> Claim Loading .... Please Wait .... </h3>
+                        <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
+                    </SubmitStakeInnerLoadingBox>
+                    <h4>Transaction Hash: <a href={etherScanClaimURL} target="_blank" > {claimTransactionHash} </a></h4>
+                </SubmitStakeLoadingBox>
+            </>}
+
+
             <Header />
             <Container>
                 <h2> User NFTs </h2>
@@ -1315,7 +1455,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                     {viewingStakedNFTs && <li onClick={() => LoadStakedNFTs([1,2])}> <strong> Staked NFTs ({userNFTsStaked}) </strong> </li>}
                     {!viewingStakedNFTs && <li onClick={() => LoadStakedNFTs([1,2])}> Staked NFTs ({userNFTsStaked})</li>}
 
-                    {testNftAmount < 2 && userNFTsStaked < 2 && (testNftAmount + userNFTsStaked < 2) && <>
+                    {testNftAmount < 3 && userNFTsStaked < 3 && <>
                         <li onClick={() => mint_test_nft()}><strong> <u> Get Free NFT </u> </strong></li>
                     </>}
                 </ul>
@@ -1638,7 +1778,7 @@ export default Account;
 //loadingScreen while waiting to claim coins
 //page should be updated once loadingScreen is done
 
-//Display Blanace of staking tokens
-//Fix Estaminted Earnings to Coins per Time periods
-//Fix Current Earnings to Coins per Time periods
 //Fix Amount to Claim when user unstakes all their NFTs
+
+//update Link to Etherscan on minted NFT
+//update Link to Open-sea on minted NFT
