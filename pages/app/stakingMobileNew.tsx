@@ -264,9 +264,15 @@ const StakingMetaBoxNONFTS = styled.div`
 
     display: inline-block;
 
-    margin-left: 90px;
+    margin-left: 20px;
+    margin-right: 20px;
 
-    padding-bottom: 0px;
+    padding-bottom: 40px;
+
+    ul {
+        list-style-type: none;
+        margin-left: 75px;
+    }
 `
 
 const ActionButton = styled.div`
@@ -335,6 +341,31 @@ const MetaBox = styled.div`
     height: 100%;
     width: 100%;
 
+    li {
+        float: none;
+        text-align: left;
+
+        margin-left: 30px;
+
+        font-size: 24px;
+
+        padding-top: 8px;
+        padding-bottom: 8px;
+
+    }
+`
+
+const MetaBoxNA = styled.div`
+    text-align: center;
+    float: left;
+
+    h3 {
+        padding-top: 20px;
+        font-size: 28px;
+    }
+
+    height: 100%;
+    width: 100%;
 
     li {
         float: none;
@@ -348,7 +379,6 @@ const MetaBox = styled.div`
         padding-bottom: 8px;
 
     }
-
 `
 
 const LOL = styled.div`
@@ -446,11 +476,11 @@ const MintingNFTBox = styled.div`
     background-color: #CD8285;
     text-align: center;
 
-    top: 50px;
-    left: 14px;
+    top: 25px;
+    left: 0px;
 
     height: 672px;
-    width: 380px;
+    width: 85%;
     padding-top: 10px;
 
     border: 2px solid black;
@@ -459,6 +489,9 @@ const MintingNFTBox = styled.div`
 
     display: inline-block;
 
+    margin-left: 30px;
+    margin-right: 30px;
+
     h2 {
         font-size: 32px;
     }
@@ -466,7 +499,6 @@ const MintingNFTBox = styled.div`
     ul {
         list-style-type: none;
         text-align: center;
-        font-weight: bold;
         margin-left: -48px;
     }
 
@@ -546,11 +578,11 @@ const SetApprovalHeader = styled.div`
     z-index: 3;
     position: fixed;
 
-    top: 190px;
-    left: 634px;
+    top: 140px;
+    left: 30px;
 
     height: 30px;
-    width: 500px;
+    width: 350px;
 `
 
 const SetApprovalBox = styled.div`
@@ -560,23 +592,23 @@ const SetApprovalBox = styled.div`
     background-color: #CD8285;
     text-align: center;
 
-    top: 220px;
-    left: 634px;
+    top: 170px;
+    left: 30px;
 
     height: 500px;
-    width: 500px;
+    width: 350px;
 
     h2 {
-        padding-top: 55px;
-        padding-bottom: 0px;
+        padding-top: 5px;
+        padding-bottom: 10px;
         font-size: 30px;
     }
 
     p {
-        padding-top: 70px;
-        padding-bottom: 70px;
+        padding-top: 20px;
+        padding-bottom: 00px;
 
-        font-size: 26px;
+        font-size: 22px;
     }
 `
 
@@ -1360,7 +1392,9 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
                     <SetApprovalBox>
                         <h2> Please Approve Staking Contract</h2>
                         {!approveLoading && <>
+                            <br /> <br />
                             <p> Status: Unapproved </p>
+                            <br /> <br /> <br />
                             <ActionButton color="#F4A7A7" onClick={() => setApprovalForAll()}> Approve </ActionButton>
                         </>}
                         {approveLoading && <>
@@ -1389,19 +1423,19 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
                             <h2> Minting Free NFT ..... </h2>
 
                             <ul>
-                                <li>TokenID: </li>
-                                <li> <strong> {mintTokenID} </strong> </li>
-                                <li>TokenURI: </li>
-                                <li> <a href={mintTokenURI}> <strong> Link</strong> </a> </li>
-                                <li>Contract Address: </li>
-                                <li> <strong> {mintContractAddress.substring(0,5) + '....' + mintContractAddress.substring(37,42)} </strong> </li>
-                                <li>Transaction Hash:</li>
-                                <li> <a href={etherScanMintURL} rel="noreferrer" target="_blank" > <strong> {mintTransactinHash.substring(0,5) + "...." + mintTransactinHash.substring(37, 42)} </strong> </a></li>
+                                <li> <strong> TokenID: </strong> </li>
+                                <li> {mintTokenID} </li>
+                                <li> <strong> TokenURI: </strong> </li>
+                                <li> <a href={mintTokenURI}> {mintTokenURI.substring(0,30) + "....."} </a> </li>
+                                <li> <strong> Contract Address: </strong> </li>
+                                <li>  {mintContractAddress.substring(0,5) + '....' + mintContractAddress.substring(37,42)}  </li>
+                                <li> <strong> Transaction Hash: </strong> </li>
+                                <li> <a href={etherScanMintURL} rel="noreferrer" target="_blank" >  {mintTransactinHash.substring(0,8) + " .... " + mintTransactinHash.substring(35, 42)} </a></li>
                             </ul>
 
                             <br />
                                 <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
-                            <br />
+                            <br /> <br />
 
                             <h3> <a href={etherScanMintURL} rel="noreferrer" target="_blank">View On Etherscan </a> </h3>
 
