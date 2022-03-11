@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import SampleABI from "./Staking.json"
 import StakingABI from "../../config/staking.json";
-import NftABI from "./NftABI.json";
+import NftABI from "./nftABI.json";
 
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import Image from "next/image";
