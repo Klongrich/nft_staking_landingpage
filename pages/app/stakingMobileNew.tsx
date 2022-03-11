@@ -37,26 +37,8 @@ const Container = styled.div`
         line-height: 45px;
         margin-left: 30px;
         padding-top: 40px;
-        padding-bottom: 20px;
+        padding-bottom: 90px;
         text-decoration: underline;
-    }
-
-    ul {
-        list-style-type: none;
-        margin-left: 120px;
-    }
-
-    li {
-        float: left;
-        padding-left: 15px;
-        padding-right: 15px;
-
-        font-size: 22px;
-
-        :hover {
-            cursor: pointer;
-            color: grey;
-        }
     }
 `
 
@@ -88,8 +70,8 @@ const AllNFTImagesBox = styled.div`
     background-color: #CD8285;
 
     margin-top: -90px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 20px;
+    margin-right: 20px;
     margin-bottom: 50px;
 
     border-radius: 20px;
@@ -116,22 +98,23 @@ const NFTImagesBox = styled.div`
     background-color: #CD8285;
 
     margin-top: -90px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 20px;
+    margin-right: 20px;
     margin-bottom: 50px;
+    padding-bottom: 20px;
 
     border-radius: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
 
-    height: 420px;
+    height: 340px;
 
     overflow: hidden;
 
     h4 {
         position: absolute;
-        top: 575px;
-        left: 89%;
+        top: 583px;
+        left: 70%;
 
         text-decoration: underline;
         font-size: 20px;
@@ -146,17 +129,20 @@ const NONFTImagesBox = styled.div`
     background-color: #CD8285;
 
     margin-top: -90px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 20px;
+    margin-right: 20px;
     margin-bottom: 50px;
 
     border-radius: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
 
-    height: 420px;
+    height: 100%;
 
     padding-top: 10px;
+
+    padding-left: 15px;
+    padding-right: 15px;
 
     h3 {
         padding-top: 0px;
@@ -166,13 +152,13 @@ const NONFTImagesBox = styled.div`
 `
 
 const PictureBox = styled.div`
-    width: 150px;
-    height: 150px;
+    width: 110px;
+    height: 110px;
 
-    margin-left: 42px;
-    margin-right: 42px;
+    margin-left: 15px;
+    margin-right: 15px;
 
-    margin-top: 35px;
+    margin-top: 40px;
 
     border: 4px solid ${(props) => props.color};
     border-radius: 20px;
@@ -230,8 +216,8 @@ const SpinnerBox = styled.div`
     padding-top: 50px;
 
     margin-top: -90px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 20px;
+    margin-right: 20px;
     margin-bottom: 50px;
 
     border-radius: 20px;
@@ -250,7 +236,24 @@ const StakingMetaBox = styled.div`
 
     display: inline-block;
 
-    padding-bottom: 0px;
+    width: 90%;
+
+    margin-left: 20px;
+    margin-right: 20px;
+
+    ul {
+        list-style-type: none;
+    }
+
+    li {
+        margin-left: 60px;
+    }
+
+    p {
+        font-size: 24px;
+    }
+
+    padding-bottom: 50px;
 `
 
 const StakingMetaBoxNONFTS = styled.div`
@@ -329,17 +332,21 @@ const MetaBox = styled.div`
         font-size: 28px;
     }
 
-    height: 350px;
-    width: 530px;
+    height: 100%;
+    width: 100%;
+
 
     li {
         float: none;
         text-align: left;
 
+        margin-left: 30px;
+
         font-size: 24px;
 
         padding-top: 8px;
         padding-bottom: 8px;
+
     }
 
 `
@@ -353,8 +360,31 @@ const LOL = styled.div`
 `
 
 const FilterBar = styled.div`
-    height: 40px;
+    height: 30px;
     margin-top: -30px;
+    margin-bottom: 175px;
+
+    ul {
+        list-style-type: none;
+        margin-left: -20px;
+    }
+
+    li {
+        float: left;
+        padding-left: 8px;
+        padding-right: 8px;
+
+        font-size: 16px;
+
+        padding-top: 13px;
+        padding-bottom: 13px;
+
+        :hover {
+            cursor: pointer;
+            color: grey;
+        }
+    }
+
 `
 
 const PartnersBox = styled.div`
@@ -379,7 +409,7 @@ const PartnersBox = styled.div`
 `
 
 const ProgressBarWrapper = styled.div`
-    width: 500px;
+    width: 800px;
     display: inline-block;
     padding-right: 100px;
 
@@ -390,9 +420,9 @@ const ProgressBarWrapper = styled.div`
 `
 
 const UserERC20BalanceBox = styled.div`
-    text-align: right;
-    padding-right: 245px;
-    margin-top: -40px;
+    margin-left: 26px;
+    margin-top: -25px;
+    margin-bottom: 40px;
 `
 
 const DialogBackground = styled.div`
@@ -416,11 +446,11 @@ const MintingNFTBox = styled.div`
     background-color: #CD8285;
     text-align: center;
 
-    top: 290px;
-    left: 314px;
+    top: 50px;
+    left: 14px;
 
-    height: 482px;
-    width: 1180px;
+    height: 672px;
+    width: 380px;
     padding-top: 10px;
 
     border: 2px solid black;
@@ -435,18 +465,9 @@ const MintingNFTBox = styled.div`
 
     ul {
         list-style-type: none;
-        text-align: right;
+        text-align: center;
         font-weight: bold;
-
-        width: 180px;
-    }
-
-    ol {
-        list-style-type: none;
-        text-align: left;
-
-        margin-top: -201px;
-        margin-left: 190px;
+        margin-left: -48px;
     }
 
     li {
@@ -464,11 +485,11 @@ const MintedNFTBox= styled.div`
     background-color: #CD8285;
     text-align: center;
 
-    top: 170px;
-    left: 664px;
+    top: 110px;
+    left: 19px;
 
     height: 550px;
-    width: 450px;
+    width: 375px;
     padding-top: 10px;
 
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -487,7 +508,6 @@ const MintedNFTBox= styled.div`
         border: 1px solid black;
         border-radius: 20px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.55);
-
     }
 
     ul {
@@ -567,11 +587,11 @@ color: black;
 background-color: #CDA3A6;
 text-align: center;
 
-top: 217px;
-left: 312px;
+top: 67px;
+left: 30px;
 
-height: 420px;
-width: 100%:
+height: 620px;
+width: 350px;
 
 `
 
@@ -581,12 +601,12 @@ background-color: #CD8285;
 text-align: center;
 
 padding-top: 20px;
-margin-top: 30px;
-margin-left: 100px;
-margin-right: 100px;
+margin-top: 40px;
+margin-left: 25px;
+margin-right: 10px;
 
-height: 300px;
-width: 900px;
+height: 350px;
+width: 300px;
 
 border: 1px solid black;
 border-radius: 20px;
@@ -596,8 +616,6 @@ h3 {
 }
 
 `
-
-
 
 var SelectedNFTs = [{ Collection : "holder", tokenID : "0" }];
 var UserNFTs = [{ image: "", tokenID: "", collection: "", selected: false}];
@@ -612,7 +630,7 @@ var testNFTs = [{image: "", attributes: [{}]}]
 //const StakingContractAddress = "0x2256D435F1b895D650F308D497A6701268e7D100"
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
-export function Account({ userAddress, web3, provider, networkID }: any) {
+export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
 
     const [hasNFTs, setHashNFTs] = useState(true);
     const [hasLoaded, setHasLoaded] = useState(false);
@@ -1372,16 +1390,14 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
 
                             <ul>
                                 <li>TokenID: </li>
+                                <li> <strong> {mintTokenID} </strong> </li>
                                 <li>TokenURI: </li>
+                                <li> <a href={mintTokenURI}> <strong> Link</strong> </a> </li>
                                 <li>Contract Address: </li>
+                                <li> <strong> {mintContractAddress.substring(0,5) + '....' + mintContractAddress.substring(37,42)} </strong> </li>
                                 <li>Transaction Hash:</li>
+                                <li> <a href={etherScanMintURL} rel="noreferrer" target="_blank" > <strong> {mintTransactinHash.substring(0,5) + "...." + mintTransactinHash.substring(37, 42)} </strong> </a></li>
                             </ul>
-                            <ol>
-                                <li> {mintTokenID} </li>
-                                <li> <a href={mintTokenURI}> {mintTokenURI} </a> </li>
-                                <li>{mintContractAddress}</li>
-                                <li> <a href={etherScanMintURL} rel="noreferrer" target="_blank" > {mintTransactinHash} </a></li>
-                            </ol>
 
                             <br />
                                 <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
@@ -1414,7 +1430,8 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                         <h3> Stake Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
-                    <h4>Transaction Hash: <a href={etherScanStakeURL} target="_blank" rel="noreferrer" > {stakeTransactionHash} </a></h4>
+                    <h4>Transaction Hash:</h4>
+                    <p> <a href={etherScanStakeURL} target="_blank" rel="noreferrer" > {stakeTransactionHash.substring(0,5) + "...." + stakeTransactionHash.substring(50, 55)} </a></p>
                 </SubmitStakeLoadingBox>
             </>}
 
@@ -1426,7 +1443,8 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                         <h3> Unstake Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
-                    <h4>Transaction Hash: <a href={etherScanUnstakeURL} target="_blank" rel="noreferrer" > {unstakeTransactionHash} </a></h4>
+                    <h4>Transaction Hash: </h4>
+                    <p><a href={etherScanUnstakeURL} target="_blank" rel="noreferrer" > {unstakeTransactionHash.substring(0,5) + "...." + stakeTransactionHash.substring(50, 55)} </a></p>
                 </SubmitStakeLoadingBox>
             </>}
 
@@ -1438,7 +1456,8 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                         <h3> Claim Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
-                    <h4>Transaction Hash: <a href={etherScanClaimURL} target="_blank" rel="noreferrer" > {claimTransactionHash} </a></h4>
+                    <h4>Transaction Hash: </h4>
+                    <p> <a href={etherScanClaimURL} target="_blank" rel="noreferrer" > {claimTransactionHash.substring(0,5) + "...." + claimTransactionHash.substring(50,55)} </a> </p>
                 </SubmitStakeLoadingBox>
             </>}
 
@@ -1446,6 +1465,12 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
             <Header />
             <Container>
                 <h2> User NFTs </h2>
+
+                {userERC20Balance > 0 && <>
+                    <UserERC20BalanceBox>
+                        <h3> Blanace: {userERC20Balance.toFixed(2)} NSC</h3>
+                    </UserERC20BalanceBox>
+                </>}
 
                 <FilterBar>
                 <ul>
@@ -1455,8 +1480,8 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                     {viewingNFTs && <li onClick={() =>  getAlchemyDataChubbis()}> <strong> NFTs ({userNFTsTotal}) </strong> </li>}
                     {!viewingNFTs && <li onClick={() => getAlchemyDataChubbis()}> NFTs ({userNFTsTotal})</li>}
 
-                    {viewingTestNFTs && <li   onClick={() => LoadUserNFTs()}> <strong> Test NFTs ({testNftAmount}) </strong> </li>}
-                    {!viewingTestNFTs && <li onClick={() => LoadUserNFTs()}> Test NFTs ({testNftAmount}) </li>}
+                    {viewingTestNFTs && <li   onClick={() => LoadUserNFTs()}> <strong> Free NFTs ({testNftAmount}) </strong> </li>}
+                    {!viewingTestNFTs && <li onClick={() => LoadUserNFTs()}> Free NFTs ({testNftAmount}) </li>}
 
                     {viewingStakedNFTs && <li onClick={() => LoadStakedNFTs([1,2])}> <strong> Staked NFTs ({userNFTsStaked}) </strong> </li>}
                     {!viewingStakedNFTs && <li onClick={() => LoadStakedNFTs([1,2])}> Staked NFTs ({userNFTsStaked})</li>}
@@ -1466,12 +1491,6 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                     </>}
                 </ul>
                 </FilterBar>
-
-                {userERC20Balance > 0 && <>
-                    <UserERC20BalanceBox>
-                        <h3> Blanace: {userERC20Balance.toFixed(2)} NSC</h3>
-                    </UserERC20BalanceBox>
-                </>}
 
                 <PictureContainer>
                     {hasNFTs && <>
@@ -1501,7 +1520,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                         {!data.selected && <>
                                         <PictureBox color={"black"}
                                                     onClick={() => updateSelectedNFT(data.id.tokenId, data.collection, index, data.metadata.image, true)}>
-                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={150} width={150} />
+                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={110} width={110} />
                                         </PictureBox>
                                         </>}
 
@@ -1509,7 +1528,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                         {data.selected && <>
                                         <PictureBox color={"blue"}
                                                     onClick={() => updateSelectedNFT(data.id.tokenId, data.collection, index, data.metadata.image, false)}>
-                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={150} width={150} />
+                                            <img src={checkIPFShash(data.metadata.image)} alt='' height={110} width={110} />
                                         </PictureBox>
                                         </>}
 
@@ -1530,14 +1549,14 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
                                 {!data.selected && <>
                                     <PictureBox color={"black"}
                                                 onClick={() => updateSelectedNFT(data.id.tokenId, data.collection, index, data.metadata.image, true)}>
-                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={110} width={110} />
                                     </PictureBox>
                                 </>}
 
                                 {data.selected && <>
                                     <PictureBox color={"blue"}
                                                 onClick={() => updateSelectedNFT(data.id.tokenId, data.collection, index, data.metadata.image, false)}>
-                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={180} width={180} />
+                                        <img src={checkIPFShash(data.metadata.image)} alt='' height={110} width={110} />
                                     </PictureBox>
                                     </>}
                                     </>}
@@ -1773,7 +1792,7 @@ export function Account({ userAddress, web3, provider, networkID }: any) {
     )
 }
 
-export default Account;
+export default StakingMobile;
 
 //To-Do Tommorow
 

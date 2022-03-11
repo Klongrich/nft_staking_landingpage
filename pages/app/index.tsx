@@ -14,7 +14,7 @@ import MobileDashboard from "./mobileDashboard";
 import Account from "./account";
 import MobileAccount from "./accountMobile";
 import Staking from "./staking";
-import MobileStaking from "./stakingMobile";
+import MobileStaking from "./stakingMobileNew";
 
 //Move infuraID to .env file
 const providerOptions = {
