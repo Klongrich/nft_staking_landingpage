@@ -331,7 +331,7 @@ function LandingPage() {
                     <img src="/Roadmap3.0.png" alt='' width="100%" />
                 </RoadMapContainer>
 
-                <TeamContainer>
+                {/* <TeamContainer>
                     <h2> Team </h2>
 
                     <h3> Founder - CEO </h3>
@@ -349,7 +349,7 @@ function LandingPage() {
                             <Github size={35} color="black" />
                         </a>
                     </IconStyleWrapper>
-                </TeamContainer>
+                </TeamContainer> */}
 
                 <FooterContainer>
                     <p> Contact: Longrichk@gmail.com </p>
