@@ -579,8 +579,8 @@ const SetApprovalHeader = styled.div`
     top: 140px;
     left: 30px;
 
-    height: 30px;
-    width: 350px;
+    height: ${(props : any) => props.height};
+    width: ${(props: any) => props.width};
 `
 
 const SetApprovalBox = styled.div`
@@ -593,20 +593,26 @@ const SetApprovalBox = styled.div`
     top: 170px;
     left: 30px;
 
-    height: 500px;
-    width: 350px;
+    height: ${(props : any) => props.height};
+    width: ${(props: any) => props.width};
+
+    line-height: 1.5;
 
     h2 {
         padding-top: 5px;
         padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
         font-size: 30px;
     }
 
     p {
-        padding-top: 20px;
-        padding-bottom: 00px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        font-size: 20px;
 
-        font-size: 22px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 `
 
@@ -1415,8 +1421,10 @@ export function StakingMobile({ userAddress, web3, provider, height, width, user
             {isApproving && <>
                 <DialogBackground />
                 {!finishedAprroving && <>
-                    <SetApprovalHeader />
-                    <SetApprovalBox>
+                    {/*@ts-ignore */}
+                    <SetApprovalHeader height={(height * 0.6) + 'px'} width={(width * 0.85) + 'px'} />
+                    {/*@ts-ignore */}
+                    <SetApprovalBox height={(height * 0.6) + 'px'} width={(width * 0.85) + 'px'}>
                         <h2> Please Approve Staking Contract</h2>
                         {!approveLoading && <>
                             <br /> <br />
@@ -1425,15 +1433,16 @@ export function StakingMobile({ userAddress, web3, provider, height, width, user
                             <ActionButton color="#F4A7A7" onClick={() => setApprovalForAll()}> Approve </ActionButton>
                         </>}
                         {approveLoading && <>
-                            <Image src={"/ColoredSpinner3.gif"} alt='' height={170} width={170} />
-                            <p>  Status: ....... Loading ... please wait </p>
+                            <Image src={"/ColoredSpinner3.gif"} alt='' height={140} width={140} />
+                            <p>  Status: ....... Loading ....... </p>
                             <ActionButton color="#F4A7A7"> .............. </ActionButton>
                         </>}
                     </SetApprovalBox>
                 </>}
 
                 {finishedAprroving && <>
-                    <SetApprovalBox>
+                    {/*@ts-ignore */}
+                    <SetApprovalBox height={(height * 0.6) + 'px'} width={(width * 0.85) + 'px'}>
                         <h2> Staking Contract Approved!</h2>
                         <p> Status: Approved! </p>
 
