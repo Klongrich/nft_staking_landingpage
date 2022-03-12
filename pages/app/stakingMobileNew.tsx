@@ -326,7 +326,6 @@ box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
 display: inline-block;
 
-
 `
 
 const MetaBox = styled.div`
@@ -351,7 +350,6 @@ const MetaBox = styled.div`
 
         padding-top: 8px;
         padding-bottom: 8px;
-
     }
 `
 
@@ -622,10 +620,11 @@ text-align: center;
 top: 67px;
 left: 30px;
 
-height: 620px;
-width: 350px;
+height: ${(props : any) => props.height};
+width: ${(props : any) => props.width};
 
 `
+
 
 const SubmitStakeInnerLoadingBox = styled.div`
 color: black;
@@ -637,14 +636,25 @@ margin-top: 40px;
 margin-left: 25px;
 margin-right: 10px;
 
-height: 350px;
-width: 300px;
+padding-left: 20px;
+padding-right: 20px;
+
+line-height: 1.5;
+
+height: ${(props : any) => props.height};
+width: ${(props : any) => props.width};
 
 border: 1px solid black;
 border-radius: 20px;
 
+
+h2 {
+    margin-top: 10px;
+    padding-bottom: 32px;
+}
+
 h3 {
-    padding-bottom: 38px;
+    padding-bottom: 32px;
 }
 
 `
@@ -736,6 +746,16 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
     const [stakeTransactionHash, setStakeTransactionHash] = useState("");
     const [unstakeTransactionHash, setUnstakeTransactionHash] = useState("");
     const [claimTransactionHash, setClaimTransactinHash] = useState("");
+
+    const [width, setWidth] = useState(window.innerWidth);
+    const [height, setHeight] = useState(window.innerHeight);
+
+    function resetTxsHashes() {
+        setMintTransactionHash("");
+        setStakeTransactionHash("");
+        setUnstakeTransactionHash("");
+        setClaimTransactinHash("");
+    }
 
     function checkIPFShash(imageURL: any) {
         var temp = imageURL.substring(0, 4);
@@ -894,7 +914,7 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
             await getUserStakingMeta();
 
             setIsStaking(false);
-
+            resetTxsHashes();
             console.log("User NFTs are now Staked;")
         }
     }
@@ -953,6 +973,7 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
         await getUserStakingMeta();
 
         setIsUnstaking(false);
+        resetTxsHashes();
 
         console.log("Unstaking Completed");
         console.log(res);
@@ -982,6 +1003,7 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
         getUserERC20blanace();
 
         setIsClaiming(false);
+        resetTxsHashes();
         console.log("CLaim Coins Ended");
         console.log(res);
     }
@@ -1230,14 +1252,12 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
         console.log(Ethaccounts);
         const userNFTs = await web3Alchemy.alchemy.getNfts({ owner: Ethaccounts[0], contractAddresses: [NftContractAddress] });
 
-
         for (let i = 0; i < userNFTs.ownedNfts.length; i++) {
             //@ts-ignore
             if (!userNFTs.ownedNfts[i].metadata.image) {
                 console.log("metadata image URL NOT FOUND");
             }
         }
-
 
         console.log(userNFTs.ownedNfts);
         //@ts-ignore
@@ -1346,6 +1366,10 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
         //getUserNFTs();
         //getAlchemyData();
         //getUserStakingMeta();
+
+        console.log("Width: " + width);
+        console.log("Height: " + height);
+
         if (!userAddress) {
             setHasWallet(false);
             setHashNFTs(false);
@@ -1458,40 +1482,52 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
 
             {isStaking && <>
                 <DialogBackground />
-                <SubmitStakeLoadingBox>
-                    <SubmitStakeInnerLoadingBox>
+                {/*@ts-ignore */}
+                <SubmitStakeLoadingBox height={(height * 0.8) + 'px'} width={(width * 0.85) + 'px'}>
+                    {/*@ts-ignore */}
+                    <SubmitStakeInnerLoadingBox height={(height * 0.5) + 'px'} width={(width * 0.60) + 'px'}>
                         <h2>Stake Submitted To Ethereum Block-chain</h2>
                         <h3> Stake Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
                     <h4>Transaction Hash:</h4>
-                    <p> <a href={etherScanStakeURL} target="_blank" rel="noreferrer" > {stakeTransactionHash.substring(0,5) + "...." + stakeTransactionHash.substring(50, 55)} </a></p>
+                    <p> <a href={etherScanStakeURL} target="_blank" rel="noreferrer" > {stakeTransactionHash.substring(0,5) + "...." + stakeTransactionHash.substring(42, 47)} </a></p>
+                    <h4> <a href={etherScanStakeURL} target="_blank" rel="noreferrer"> View On Etherscan </a> </h4>
+                    <h4 onClick={() => setIsStaking(false)}> Close </h4>
                 </SubmitStakeLoadingBox>
             </>}
 
             {isUnstaking && <>
                 <DialogBackground />
-                <SubmitStakeLoadingBox>
-                    <SubmitStakeInnerLoadingBox>
+                {/*@ts-ignore */}
+                <SubmitStakeLoadingBox height={(height * 0.8) + 'px'} width={(width * 0.85) + 'px'}>
+                    {/*@ts-ignore */}
+                    <SubmitStakeInnerLoadingBox height={(height * 0.5) + 'px'} width={(width * 0.62) + 'px'}>
                         <h2>Unstake Submitted To Ethereum Block-chain</h2>
                         <h3> Unstake Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
                     <h4>Transaction Hash: </h4>
-                    <p><a href={etherScanUnstakeURL} target="_blank" rel="noreferrer" > {unstakeTransactionHash.substring(0,5) + "...." + stakeTransactionHash.substring(50, 55)} </a></p>
+                    <p><a href={etherScanUnstakeURL} target="_blank" rel="noreferrer" > {unstakeTransactionHash.substring(0,5) + "...." + stakeTransactionHash.substring(42, 47)} </a></p>
+                    <h4> <a href={etherScanStakeURL} target="_blank" rel="noreferrer"> View On Etherscan </a> </h4>
+                    <h4 onClick={() => setIsUnstaking(false)}> Close </h4>
                 </SubmitStakeLoadingBox>
             </>}
 
             {isClaiming && <>
                 <DialogBackground />
-                <SubmitStakeLoadingBox>
-                    <SubmitStakeInnerLoadingBox>
+                {/*@ts-ignore */}
+                <SubmitStakeLoadingBox height={(height * 0.8) + 'px'} width={(width * 0.85) + 'px'}>
+                    {/*@ts-ignore */}
+                    <SubmitStakeInnerLoadingBox height={(height * 0.5) + 'px'} width={(width * 0.72) + 'px'}>
                         <h2> Claim Submitted To Ethereum Block-chain</h2>
                         <h3> Claim Loading .... Please Wait .... </h3>
                         <Image src={"/ColoredSpinner3.gif"} alt='' height={90} width={90} />
                     </SubmitStakeInnerLoadingBox>
                     <h4>Transaction Hash: </h4>
                     <p> <a href={etherScanClaimURL} target="_blank" rel="noreferrer" > {claimTransactionHash.substring(0,5) + "...." + claimTransactionHash.substring(50,55)} </a> </p>
+                    <h4> <a href={etherScanStakeURL} target="_blank" rel="noreferrer"> View On Etherscan </a> </h4>
+                    <h4 onClick={() => setIsClaiming(false)}> Close </h4>
                 </SubmitStakeLoadingBox>
             </>}
 
@@ -1697,7 +1733,7 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
 
                                 <ul>
                                     <li> ----------------------- </li>
-                                    <li> | | | {payOutAmount} NSC | | | </li>
+                                    <li> | | | {payOutAmount.toFixed(2)} NSC | | | </li>
                                     <li> ----------------------- </li>
                                 </ul>
 
@@ -1809,7 +1845,7 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
                                 <h3> Amount To Claim:</h3>
 
                                 <ul>
-                                    <li> {payOutAmount} Coins </li>
+                                    <li> {payOutAmount.toFixed(2)} Coins </li>
                                 </ul>
 
                                 <ActionButton onClick={() => claim_coins()} color={"#F4A7A7"}> Claim </ActionButton>
