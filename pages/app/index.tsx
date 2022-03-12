@@ -238,6 +238,9 @@ export function Dapp(): any {
 
     const [state, setState] = useState("Collections");
 
+    const [height, setHeight] = useState(0);
+    const [width, setWidth] = useState(0);
+
     async function loadWeb3() {
         if (typeof window !== "undefined") {
             const web3Modal = new Web3Modal({
@@ -286,6 +289,8 @@ export function Dapp(): any {
 
     useEffect(() => {
         loadWeb3();
+        setHeight(window.innerHeight);
+        setWidth(window.innerWidth);
         if (typeof window != "undefined") {
             if (window.innerWidth > 999) {
                 setIsMobile(false);
@@ -410,6 +415,8 @@ export function Dapp(): any {
                     <MobileStaking userAddress={userAddress}
                                  web3={web3}
                                  provider={provider}
+                                 height={height}
+                                 width={width}
                     />
                 </>}
             </>}

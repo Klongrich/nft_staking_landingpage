@@ -672,7 +672,7 @@ var testNFTs = [{image: "", attributes: [{}]}]
 //const StakingContractAddress = "0x2256D435F1b895D650F308D497A6701268e7D100"
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
-export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
+export function StakingMobile({ userAddress, web3, provider, height, width, networkID }: any) {
 
     const [hasNFTs, setHashNFTs] = useState(true);
     const [hasLoaded, setHasLoaded] = useState(false);
@@ -746,9 +746,6 @@ export function StakingMobile({ userAddress, web3, provider, networkID }: any) {
     const [stakeTransactionHash, setStakeTransactionHash] = useState("");
     const [unstakeTransactionHash, setUnstakeTransactionHash] = useState("");
     const [claimTransactionHash, setClaimTransactinHash] = useState("");
-
-    const [width, setWidth] = useState(window.innerWidth);
-    const [height, setHeight] = useState(window.innerHeight);
 
     function resetTxsHashes() {
         setMintTransactionHash("");
