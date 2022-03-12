@@ -1486,7 +1486,7 @@ export function StakingMobile({ userAddress, web3, provider, height, width, user
 
                             <img src={"https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/" + mintTokenID + ".png"} alt="" height={220} width={220} />
 
-                            <h3> <a href={"https://testnets.opensea.io/assets/0xeaed850e4b857f8d403dfd58758664391239b115/" + mintTokenID} target="_blank" rel="noreferrer" > View on Opensea</a> </h3>
+                            <h3> <a href={"https://testnets.opensea.io/assets/0x702FbFa4ed5861C73d2a1EFA9007FBc8C13a5EAc/" + mintTokenID} target="_blank" rel="noreferrer" > View on Opensea</a> </h3>
                             <h4 onClick={() => setIsMinting(false)}> Close </h4>
                         </MintedNFTBox>
                     </>}
