@@ -672,7 +672,7 @@ var testNFTs = [{image: "", attributes: [{}]}]
 //const StakingContractAddress = "0x2256D435F1b895D650F308D497A6701268e7D100"
 
 //Fix so that if pulls NFTs once the user connects or reconnects to meta-mask.
-export function StakingMobile({ userAddress, web3, provider, height, width, networkID }: any) {
+export function StakingMobile({ userAddress, web3, provider, height, width, userBalance, networkID }: any) {
 
     const [hasNFTs, setHashNFTs] = useState(true);
     const [hasLoaded, setHasLoaded] = useState(false);
@@ -1185,6 +1185,12 @@ export function StakingMobile({ userAddress, web3, provider, height, width, netw
 
     async function mint_test_nft() {
         console.log(userAddress);
+        console.log("userBalance: " + userBalance);
+
+        if (userBalance <= 0) {
+            alert("\nWallet Needs Rinkeby ETH For Free NFT. \n\nPlease Visit: https://faucet.rinkeby.io/\n\n");
+            return (0);
+        }
 
         console.log(await web3.eth.getAccounts());
         const Ethaccounts = await web3.eth.getAccounts();

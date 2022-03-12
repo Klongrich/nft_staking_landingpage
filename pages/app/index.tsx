@@ -234,6 +234,7 @@ export function Dapp(): any {
     const [provider, setProvider] = useState(undefined);
     const [isMobile, setIsMobile] = useState(false);
     const [userAddress, setUserAddress] = useState('');
+    const [userBalance, setUserBalance] = useState(0);
     const [networkID, setNetworkID] = useState(0x1);
 
     const [state, setState] = useState("Collections");
@@ -275,7 +276,11 @@ export function Dapp(): any {
 
             if (web3) {
                 const EthAccounts = await web3.eth.getAccounts();
+                let walletBalance = await web3.eth.getBalance(EthAccounts[0]);
+                let userBalance = parseFloat(walletBalance) / 1000000000000000000;
+
                 setUserAddress(EthAccounts[0]);
+                setUserBalance(userBalance);
                 setWeb3(web3);
             } else {
                 console.log('web3 not found');
@@ -417,6 +422,7 @@ export function Dapp(): any {
                                  provider={provider}
                                  height={height}
                                  width={width}
+                                 userBalance={userBalance}
                     />
                 </>}
             </>}
